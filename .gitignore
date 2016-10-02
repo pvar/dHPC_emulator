@@ -1,0 +1,5 @@
+*txt
+*~
+*.o
+./bin/*~
+./bin/dhpcemu
