@@ -153,11 +153,7 @@ void key_press_event (GtkWidget *widget, GdkEventKey *event)
                                 case GDK_KEY_c:
                                 case GDK_KEY_C:
                                         break_flow = 1;
-                                        // decrease pointer because it will be increased
-                                        // and no character was added in the buffer!
-                                        keyboard_data.wp--;
-                                        if (keyboard_data.wp < 0)
-                                                keyboard_data.wp = KEYBOARD_BUFFER_SIZE;
+                                        keyboard_data.buffer[keyboard_data.wp] = SPACE;
                                         break;
                                 default:
                                         keyboard_data.buffer[keyboard_data.wp] = SPACE;
