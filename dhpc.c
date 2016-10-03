@@ -30,6 +30,10 @@ gint main (int argc, char *argv[])
         /* initialize GTK+ libraries */
         gtk_init(&argc, &argv);
 
+        /* start threads for emulation of sub-systems */
+        g_thread_new ("CPU - GPU thread", CPU_GPU_thread_init, NULL);
+        //g_thread_new ("APU thread", APU_thread_init, NULL);
+
         /* build UI from XML file */
         if(build_ui() == FALSE)
                 return 1;
@@ -122,27 +126,56 @@ gint get_current_path (gchar **dir)
         }
 }
 
+/** ***************************************************************************
+ * @brief Receive key-presses from GUI.
+ *****************************************************************************/
 void key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
-        g_print ("%i  ", event->keyval);
+        //g_print ("[%i]", event->keyval);
 
+        GdkModifierType modifiers;
+
+        G_LOCK (keyboard_data);
+        modifiers = gtk_accelerator_get_default_mod_mask();
+        /* check if there is free space in buffer */
+        if (keyboard_data.cnt < KEYBOARD_BUFFER_SIZE) {
+                /* if CONTROL is pressed... */
+                if ((event->state & modifiers) == GDK_CONTROL_MASK) {
+                        switch (event->keyval) {
+                                case GDK_KEY_l:
+                                case GDK_KEY_L:
+                                        keyboard_data.buffer[keyboard_data.wp] = CTRL_L;
+                                        break;
+                                case GDK_KEY_g:
+                                case GDK_KEY_G:
+                                        keyboard_data.buffer[keyboard_data.wp] = CTRL_G;
+                                        break;
+                                case GDK_KEY_c:
+                                case GDK_KEY_C:
+                                        break_flow = 1;
+                                        // decrease pointer because it will be increased
+                                        // and no character was added in the buffer!
+                                        keyboard_data.wp--;
+                                        if (keyboard_data.wp < 0)
+                                                keyboard_data.wp = KEYBOARD_BUFFER_SIZE;
+                                        break;
+                                default:
+                                        keyboard_data.buffer[keyboard_data.wp] = SPACE;
+                                        break;
+                        }
+                /* if CONTROL is NOT pressed... */
+                } else {
+                        /* put character in buffer */
+                        keyboard_data.buffer[keyboard_data.wp] = event->keyval;
+                }
+                /* update write pointer */
+                keyboard_data.wp++;
+                if (keyboard_data.wp == KEYBOARD_BUFFER_SIZE)
+                        keyboard_data.wp = 0;
+                /* update character count */
+                keyboard_data.cnt++;
+        } else {
+                do_beep();
+        }
+        G_UNLOCK (keyboard_data);
 }
-
-
-
-
-/* Example of GMutex with convenience macros
-
-G_LOCK_DEFINE (current_number);
-int give_me_next_number (void)
-{
-        static int current_number = 0;
-        int ret_val;
-
-        G_LOCK (current_number);
-        ret_val = current_number = calc_next_number (current_number);
-        G_UNLOCK (current_number);
-
-        return ret_val;
-}
-*/

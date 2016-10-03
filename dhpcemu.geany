@@ -27,10 +27,17 @@ long_line_behaviour=1
 long_line_column=100
 
 [files]
-current_page=2
-FILE_NAME_0=586;Make;0;EUTF-8;1;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2FMakefile;0;8
-FILE_NAME_1=4167;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.c;0;8
-FILE_NAME_2=209;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.h;0;8
+current_page=6
+FILE_NAME_0=375;Make;0;EUTF-8;1;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2FMakefile;0;8
+FILE_NAME_1=4516;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.c;0;8
+FILE_NAME_2=583;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.h;0;8
+FILE_NAME_3=2353;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fio.c;0;8
+FILE_NAME_4=1506;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fio.h;0;8
+FILE_NAME_5=640;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Finterpreter.h;0;8
+FILE_NAME_6=1354;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fparser.h;0;8
+FILE_NAME_7=581;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fprinting.h;0;8
+FILE_NAME_8=1350;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcpu_gpu.c;0;8
+FILE_NAME_9=1897;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcpu_gpu.h;0;8
 
 [prjorg]
 source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;*.m;
