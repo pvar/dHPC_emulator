@@ -25,15 +25,30 @@
 #include "interpreter.h"
 #include "parser.h"
 
+/* FLOW CONTROL */
+uint8_t gotoline (void);
+uint8_t check (void);
+uint8_t loopfor (void);
+uint8_t gosub (void);
+uint8_t next (void);
+uint8_t gosub_return (uint8_t cmd);
+
+
+/* VARIOUS */
 int8_t prog_run (void);
 int8_t prog_end (void);
 int8_t prog_new (void);
-int8_t input (void);
+
 int8_t assignment (void);
+int8_t input (void);
 int8_t poke (void);
-int8_t list (void);
 int8_t mem (void);
+int8_t list (void);
+
 int8_t randomize (void);
 int8_t rndseed (void);
 
+/* PIN CONTROL */
+uint8_t pindwrite (void);
+uint8_t pindir (void);
 #endif

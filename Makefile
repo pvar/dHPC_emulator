@@ -26,8 +26,8 @@ TUNNING = -O0 -fshort-enums
 ERRORS = -Werror
 
 FLAGS = $(STANDARD) $(WARNINGS) $(ERRORS) $(TUNNING)
-GTKLIB=`pkg-config --cflags --libs gtk+-3.0 gmodule-export-2.0`
-LIBS = -pthread $(GTKLIB) -export-dynamic -rdynamic -lm -lcairo
+GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
+LIBS = $(GTKLIB) -rdynamic -lm
 
 ### ---------------------------------------------------------------------------
 ### TARGETS

@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#include "cmd_screen.h"
+#include "cmd_video.h"
 
 uint8_t reset_display (void)
 {

@@ -18,11 +18,9 @@
 #include <stdlib.h>
 
 #include "cpu_gpu.h"
+#include "cmd_various.h"
+#include "cmd_video.h"
 #include "cmd_audio.h"
-#include "cmd_screen.h"
-#include "cmd_flow.h"
-#include "cmd_pinctl.h"
-#include "cmd_other.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

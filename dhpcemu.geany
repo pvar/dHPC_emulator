@@ -27,8 +27,8 @@ long_line_behaviour=1
 long_line_column=100
 
 [files]
-current_page=3
-FILE_NAME_0=6427;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.c;0;8
+current_page=15
+FILE_NAME_0=5579;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.c;0;8
 FILE_NAME_1=583;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fdhpc.h;0;8
 FILE_NAME_2=6272;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fio.c;0;8
 FILE_NAME_3=1569;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fio.h;0;8
@@ -43,8 +43,7 @@ FILE_NAME_11=1663;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcpu_gp
 FILE_NAME_12=5957;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcmd_other.c;0;8
 FILE_NAME_13=0;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcmd_audio.c;0;8
 FILE_NAME_14=0;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcmd_flow.c;0;8
-FILE_NAME_15=0;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcmd_pinctl.c;0;8
-FILE_NAME_16=4214;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcmd_screen.c;0;8
+FILE_NAME_15=828;C;0;EUTF-8;0;1;0;%2Fhome%2Fpvar%2Fworkspace%2Fdhpcemu%2Fcmd_pinctl.c;0;8
 
 [prjorg]
 source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;*.m;
