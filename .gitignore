@@ -1,6 +1,6 @@
 *txt
 *~
 *.o
-./bin/*~
-./bin/dhpcemu
+bin/*~
+bin/dhpcemu
 dhpcemu.geany

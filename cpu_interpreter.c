@@ -75,18 +75,12 @@ uint16_t get_linenumber (void)
  * This function initializes pointers used by the interpreter
  * and prints a welcome message along with the misc_print_memory size.
  *****************************************************************************/
-void basic_init (void)
+void init_basic (void)
 {
         prog_end_ptr = program_space;
         stack_ptr = program_space + MEMORY_SIZE;
         stack_limit = program_space + MEMORY_SIZE - STACK_SIZE;
         variables_ptr = stack_limit - 27 * VAR_SIZE;
-
-        // print (available) SRAM size
-        printnum (variables_ptr - prog_end_ptr, active_stream);
-        printmsg (msg_ram_bytes, active_stream);
-
-        newline (active_stream);
 }
 
 /** ***************************************************************************

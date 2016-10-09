@@ -143,6 +143,12 @@ const uint8_t logoimg[728] = {
 
 
 
+void init_video() {
+        vid_clear();
+        text_color (TEXT_COL_DEFAULT);
+        paper_color (BACK_COL_DEFAULT);
+}
+
 uint8_t vid_reset (void)
 {
         printmsg (msg_welcome, active_stream);
@@ -152,6 +158,8 @@ uint8_t vid_reset (void)
 
 uint8_t vid_clear (void)
 {
+        cursor_x = 0;
+        cursor_y = 0;
         return POST_CMD_NEXT_STATEMENT;
 }
 

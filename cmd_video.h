@@ -22,20 +22,24 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "dhpcemu.h"
 #include "cpu_interpreter.h"
 #include "cpu_parser.h"
 
+void init_video (void);
+void vid_put_character (uint8_t chr);
 uint8_t vid_reset (void);
 uint8_t vid_clear (void);
 uint8_t vid_set_pen_colour (void);
 uint8_t vid_set_paper_colour(void);
 uint8_t vid_locate_cursor (void);
 uint8_t vid_put_pixel (void);
-void vid_put_character (uint8_t chr);
+
+
 
 const uint8_t logoimg[728];
 const uint8_t fontdata[950];
-
 
 #define CHAR_PER_LINE 32
 #define TEXT_COL_DEFAULT 7

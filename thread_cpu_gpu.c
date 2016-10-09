@@ -29,17 +29,19 @@
  *****************************************************************************/
 gpointer CPU_GPU_thread_init (gpointer data)
 {
-        /* start nstBASIC interpreter */
         init_io();
+        init_video();
+        init_basic();
 
-        cursor_x = 0;
-        cursor_y = 0;
-
-        text_color (TEXT_COL_DEFAULT);
-        paper_color (BACK_COL_DEFAULT);
-        printmsg (msg_welcome, active_stream);
         do_beep();
-        basic_init();
+
+        /* print welcome message */
+        printmsg (msg_welcome, active_stream);
+        /* print (available) SRAM size */
+        printnum (variables_ptr - prog_end_ptr, active_stream);
+        printmsg (msg_ram_bytes, active_stream);
+        newline (active_stream);
+
         interpreter();
         return NULL;
 }
