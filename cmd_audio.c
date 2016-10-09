@@ -19,19 +19,19 @@
 
 #include "cmd_audio.h"
 
-uint8_t snd_play (void)
+guchar snd_play (void)
 {
 //        send_to_apu (snd_play);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t snd_stop (void)
+guchar snd_stop (void)
 {
 //        send_to_apu (snd_stop);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t snd_tempo (void)
+guchar snd_tempo (void)
 {
         uint16_t specified_tempo;
         ignorespace();
@@ -60,9 +60,9 @@ uint8_t snd_tempo (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t snd_music (void)
+guchar snd_music (void)
 {
-        uint8_t delim;
+        guchar delim;
         ignorespace();
         error_code = 0;
         delim = *text_ptr;

@@ -42,7 +42,7 @@ int8_t flow_end (void)
         return POST_CMD_EXEC_LINE;
 }
 
-uint8_t flow_goto (void)
+guchar flow_goto (void)
 {
     linenum = parse_expr_s1();
     if (error_code || *text_ptr != LF) {
@@ -53,10 +53,10 @@ uint8_t flow_goto (void)
     return POST_CMD_EXEC_LINE;
 }
 
-uint8_t flow_forloop (void)
+guchar flow_forloop (void)
 {
-        uint8_t index;
-                uint8_t var;
+        guchar index;
+                guchar var;
                 uint16_t initial, step, terminal;
                 ignorespace();
                 if (*text_ptr < 'A' || *text_ptr > 'Z') {
@@ -119,7 +119,7 @@ uint8_t flow_forloop (void)
     return POST_CMD_WARM_RESET;
 }
 
-uint8_t flow_gosub (void)
+guchar flow_gosub (void)
 {
         error_code = 0;
         linenum = parse_expr_s1();
@@ -141,7 +141,7 @@ uint8_t flow_gosub (void)
     return POST_CMD_WARM_RESET;
 }
 
-uint8_t flow_next (void)
+guchar flow_next (void)
 {
         // find the variable name
         ignorespace();
@@ -158,9 +158,9 @@ uint8_t flow_next (void)
     return POST_CMD_NOTHING;
 }
 
-uint8_t flow_return (uint8_t cmd)
+guchar flow_return (guchar cmd)
 {
-    uint8_t *tmp_stack_ptr;
+    guchar *tmp_stack_ptr;
 
         // walk up the stack frames and find the frame we want -- if present
         tmp_stack_ptr = stack_ptr;
@@ -210,9 +210,9 @@ uint8_t flow_return (uint8_t cmd)
     return POST_CMD_WARM_RESET;
 }
 
-uint8_t misc_print (void)
+guchar misc_print (void)
 {
-        uint8_t status = 0;
+        guchar status = 0;
 
         // If we have an empty list then just put out a LF
         if (*text_ptr == ':') {
@@ -260,7 +260,7 @@ uint8_t misc_print (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t misc_conditional (void)
+guchar misc_conditional (void)
 {
     uint16_t value;
     value = parse_expr_s1();
@@ -276,10 +276,10 @@ uint8_t misc_conditional (void)
 
 int8_t misc_get_value (void)
 {
-    uint8_t chr = 0;
-    uint8_t cnt = 0;
+    guchar chr = 0;
+    guchar cnt = 0;
     int16_t *var;
-    uint8_t *input_buffer_ptr;
+    guchar *input_buffer_ptr;
 
     // variable to store user value
     ignorespace();
@@ -435,7 +435,7 @@ int8_t misc_list (void)
         }
 
         // find line
-        uint8_t *line = find_line();
+        guchar *line = find_line();
         LINE_LENGTH length = 0;
         while (line != prog_end_ptr) {
                 printline (line, active_stream);
@@ -482,12 +482,12 @@ int8_t prng_seed_define (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t gpio_set_direction (void)
+guchar gpio_set_direction (void)
 {
         return 0;
 }
 
-uint8_t gpio_write_digital (void)
+guchar gpio_write_digital (void)
 {
         return 0;
 }

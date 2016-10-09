@@ -25,9 +25,9 @@
 #include "cpu_interpreter.h"
 #include "cpu_parser.h"
 
-uint8_t snd_play (void);
-uint8_t snd_stop (void);
-uint8_t snd_tempo (void);
-uint8_t snd_music (void);
+guchar snd_play (void);
+guchar snd_stop (void);
+guchar snd_tempo (void);
+guchar snd_music (void);
 
 #endif

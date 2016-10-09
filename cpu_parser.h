@@ -26,7 +26,7 @@
 // PROTOTYPES
 // ------------------------------------------------------------------------------
 
-int8_t scantable (const uint8_t *table);
+int8_t scantable (const guchar *table);
 void parse_channel (void);
 void parse_notes (void);
 int16_t parse_expr_s1 (void);

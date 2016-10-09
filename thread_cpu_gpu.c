@@ -46,14 +46,10 @@ gpointer CPU_GPU_thread_init (gpointer data)
         return NULL;
 }
 
-
-
-
-
 /** ***************************************************************************
  * @brief Push a byte in the STACK.
  *****************************************************************************/
-void push_byte (uint8_t byte_to_push)
+void push_byte (guchar byte_to_push)
 {
         stack_ptr--;
         *stack_ptr = byte_to_push;
@@ -62,9 +58,9 @@ void push_byte (uint8_t byte_to_push)
 /** ***************************************************************************
  * @brief Pop a byte from the STACK.
  *****************************************************************************/
-uint8_t pop_byte (void)
+guchar pop_byte (void)
 {
-        uint8_t byte_to_pop;
+        guchar byte_to_pop;
         byte_to_pop = *stack_ptr;
         stack_ptr++;
         return byte_to_pop;
@@ -73,9 +69,9 @@ uint8_t pop_byte (void)
 /** ***************************************************************************
  *
  *****************************************************************************/
-uint8_t *find_line (void)
+guchar *find_line (void)
 {
-        uint8_t *line = program_space;
+        guchar *line = program_space;
         while (1) {
                 if (line == prog_end_ptr)
                         return line;
@@ -98,8 +94,8 @@ void ignorespace (void)
 
 void uppercase (void)
 {
-        uint8_t *c = prog_end_ptr + sizeof (uint16_t);
-        uint8_t quote = 0;
+        guchar *c = prog_end_ptr + sizeof (uint16_t);
+        guchar quote = 0;
         while (*c != LF) {
                 // are we in a quoted string?
                 if (*c == quote) quote = 0;
@@ -112,7 +108,7 @@ void uppercase (void)
 /** ***************************************************************************
  * @brief Check if BREAK button was pressed.
  *****************************************************************************/
-uint8_t break_test (void)
+guchar break_test (void)
 {
         if (break_flow) {
                 break_flow = 0;
@@ -124,9 +120,9 @@ uint8_t break_test (void)
 /** ***************************************************************************
  * @brief Transform string representation to numeric.
  *****************************************************************************/
-int16_t str_to_num (uint8_t *strptr)
+int16_t str_to_num (guchar *strptr)
 {
-        uint8_t negative = 0;
+        guchar negative = 0;
         int16_t value = 0;
         // check for minus sign
         if (*strptr == '-') {

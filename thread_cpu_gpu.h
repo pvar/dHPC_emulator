@@ -33,15 +33,15 @@ gpointer CPU_GPU_thread_init (gpointer data);
 // internal data handling
 void uppercase (void);
 void ignorespace (void);
-void push_byte (uint8_t b);
-uint8_t pop_byte (void);
-int16_t str_to_num (uint8_t *strptr);
-uint8_t *find_line (void);
+void push_byte (guchar b);
+guchar pop_byte (void);
+int16_t str_to_num (guchar *strptr);
+guchar *find_line (void);
 
-uint8_t break_test (void);
+guchar break_test (void);
 
-uint16_t valid_filename_char (uint8_t c);
-uint8_t * valid_filename (void);
+uint16_t valid_filename_char (guchar c);
+guchar * valid_filename (void);
 
 // ------------------------------------------------------------------------------
 // CONSTANTS
@@ -56,7 +56,7 @@ uint8_t * valid_filename (void);
 // GLOBALS
 // ------------------------------------------------------------------------------
 
-uint8_t sys_config;
+guchar sys_config;
 
 guint to_apu;
 

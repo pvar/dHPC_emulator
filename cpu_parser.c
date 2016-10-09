@@ -37,7 +37,7 @@
 /// @cond BASIC_KEYWORDS
 
 // functions which cannot be part of a larger expression  (return nothing / might print a value)
-const uint8_t commands[208] = {
+const guchar commands[208] = {
             'L', 'I', 'S', 'T' + 0x80,
             'N', 'E', 'W' + 0x80,
             'R', 'U', 'N' + 0x80,
@@ -82,7 +82,7 @@ const uint8_t commands[208] = {
             0
     };
 // functions that must be part of a larger expression (return a value / print nothing)
-const uint8_t functions[27] = {
+const guchar functions[27] = {
             'P', 'E', 'E', 'K' + 0x80,
             'A', 'B', 'S' + 0x80,
             'R', 'N', 'D' + 0x80,
@@ -91,7 +91,7 @@ const uint8_t functions[27] = {
             0
     };
 // relational operators
-const uint8_t relop_table[12] = {
+const guchar relop_table[12] = {
             '>', '=' + 0x80,
             '<', '>' + 0x80,
             '>' + 0x80,
@@ -102,15 +102,15 @@ const uint8_t relop_table[12] = {
             0
     };
 // other keywords
-const uint8_t to_tab[3] = {
+const guchar to_tab[3] = {
             'T', 'O' + 0x80,
             0
     };
-const uint8_t step_tab[5] = {
+const guchar step_tab[5] = {
             'S', 'T', 'E', 'P' + 0x80,
             0
     };
-const uint8_t highlow_tab[12] = {
+const guchar highlow_tab[12] = {
             'H', 'I', 'G', 'H' + 0x80,
             'H', 'I' + 0x80,
             'L', 'O', 'W' + 0x80,
@@ -123,10 +123,10 @@ const uint8_t highlow_tab[12] = {
 static int16_t parse_expr_s2 (void);
 static int16_t parse_expr_s3 (void);
 static int16_t parse_expr_s4 (void);
-static uint8_t get_note (void);
-static uint8_t get_effect (void);
-static uint8_t get_duration (void);
-static uint8_t get_octave (void);
+static guchar get_note (void);
+static guchar get_effect (void);
+static guchar get_duration (void);
+static guchar get_octave (void);
 
 /** ***************************************************************************
  * @brief Search for any string in specified table.
@@ -138,7 +138,7 @@ static uint8_t get_octave (void);
  * @param table A pointer to an array of strings, located in FLASH.
  * @return The position (index) of the detected string in array.
  *****************************************************************************/
-int8_t scantable (const uint8_t *table)
+int8_t scantable (const guchar *table)
 {
         int8_t position = 0;
         uint16_t pos = 0;
@@ -181,7 +181,7 @@ int8_t scantable (const uint8_t *table)
  * @note Scanning begins at the character pointed to by @c text_ptr.
  * @return A number indicating the defined effect.
  *****************************************************************************/
-static uint8_t get_effect (void)
+static guchar get_effect (void)
 {
         // EFFECT                       RETURN VALUE
         //      none                            0
@@ -234,8 +234,8 @@ void parse_channel (void)
  *****************************************************************************/
 void parse_notes (void)
 {
-        uint8_t tmp1, tmp2, tmp3, tmp4;
-        uint8_t params, note;
+        guchar tmp1, tmp2, tmp3, tmp4;
+        guchar params, note;
         while (1) {
                 //text_ptr++;
                 tmp1 = get_octave();
@@ -271,7 +271,7 @@ void parse_notes (void)
 int16_t parse_expr_s1 (void)
 {
         int16_t value1, value2;
-        uint8_t index;
+        guchar index;
 
         value1 = parse_expr_s2();
 
@@ -392,7 +392,7 @@ static int16_t parse_expr_s3 (void)
  *****************************************************************************/
 static int16_t parse_expr_s4 (void)
 {
-        uint8_t index;
+        guchar index;
         int16_t value1 = 0;
         int16_t value2 = 0;
 
@@ -539,7 +539,7 @@ static int16_t parse_expr_s4 (void)
  * @note Scanning begins at the character pointed to by @c text_ptr.
  * @return A number indicating the defined note.
  *****************************************************************************/
-static uint8_t get_note (void)
+static guchar get_note (void)
 {
         // NOTE         RETURN VALUE
         //      C                       01
@@ -635,7 +635,7 @@ static uint8_t get_note (void)
  * @note Scanning begins at the character pointed to by @c text_ptr.
  * @return A number indicating the defined octave.
  *****************************************************************************/
-static uint8_t get_octave (void)
+static guchar get_octave (void)
 {
         // OCTAVE               RETURN VALUE
         //      2                               2
@@ -662,7 +662,7 @@ static uint8_t get_octave (void)
  * @note Scanning begins at the character pointed to by @c text_ptr.
  * @return A number indicating the defined duration.
  *****************************************************************************/
-static uint8_t get_duration (void)
+static guchar get_duration (void)
 {
         // DURATION                     RETURN VALUE
         //      1/32                            1

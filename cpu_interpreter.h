@@ -71,21 +71,21 @@ enum EXECUTION_STATUS {
 // ------------------------------------------------------------------------------
 
 typedef uint16_t LINE_NUMBER;
-typedef uint8_t LINE_LENGTH;
+typedef guchar LINE_LENGTH;
 
 struct stack_for_frame {
-        uint8_t frame_type;
-        uint8_t for_var;
+        guchar frame_type;
+        guchar for_var;
         uint16_t terminal;
         uint16_t step;
-        uint8_t *line_ptr;
-        uint8_t *text_ptr;
+        guchar *line_ptr;
+        guchar *text_ptr;
 };
 
 struct stack_gosub_frame {
         uint16_t frame_type;
-        uint8_t *line_ptr;
-        uint8_t *text_ptr;
+        guchar *line_ptr;
+        guchar *text_ptr;
 };
 
 // ------------------------------------------------------------------------------
@@ -93,64 +93,64 @@ struct stack_gosub_frame {
 // ------------------------------------------------------------------------------
 
 // general messages (definitions in printing.c)
-extern const uint8_t msg_welcome[25];
-extern const uint8_t msg_ram_bytes[11];
-extern const uint8_t msg_rom_bytes[11];
-extern const uint8_t msg_available[17];
-extern const uint8_t msg_break[7];
-extern const uint8_t msg_ok[3];
+extern const guchar msg_welcome[25];
+extern const guchar msg_ram_bytes[11];
+extern const guchar msg_rom_bytes[11];
+extern const guchar msg_available[17];
+extern const guchar msg_break[7];
+extern const guchar msg_ok[3];
 
 // error messages (definitions in printing.c)
-extern const uint8_t err_msgxl[6];
-extern const uint8_t err_msgxr[7];
-extern const uint8_t err_msg01[20];
-extern const uint8_t err_msg02[13];
-extern const uint8_t err_msg03[15];
-extern const uint8_t err_msg04[21];
-extern const uint8_t err_msg05[20];
-extern const uint8_t err_msg07[18];
-extern const uint8_t err_msg08[21];
-extern const uint8_t err_msg09[20];
-extern const uint8_t err_msg0A[18];
-extern const uint8_t err_msg0B[17];
-extern const uint8_t err_msg0C[19];
-extern const uint8_t err_msg0D[14];
-extern const uint8_t err_msg0E[17];
-extern const uint8_t err_msg0F[16];
-extern const uint8_t err_msg10[20];
-extern const uint8_t err_msg11[22];
-extern const uint8_t err_msg12[23];
-extern const uint8_t err_msg13[13];
-extern const uint8_t err_msg14[24];
-extern const uint8_t err_msg15[21];
+extern const guchar err_msgxl[6];
+extern const guchar err_msgxr[7];
+extern const guchar err_msg01[20];
+extern const guchar err_msg02[13];
+extern const guchar err_msg03[15];
+extern const guchar err_msg04[21];
+extern const guchar err_msg05[20];
+extern const guchar err_msg07[18];
+extern const guchar err_msg08[21];
+extern const guchar err_msg09[20];
+extern const guchar err_msg0A[18];
+extern const guchar err_msg0B[17];
+extern const guchar err_msg0C[19];
+extern const guchar err_msg0D[14];
+extern const guchar err_msg0E[17];
+extern const guchar err_msg0F[16];
+extern const guchar err_msg10[20];
+extern const guchar err_msg11[22];
+extern const guchar err_msg12[23];
+extern const guchar err_msg13[13];
+extern const guchar err_msg14[24];
+extern const guchar err_msg15[21];
 
 // functions that return nothing / might print a value (definition in parser.c)
-extern const uint8_t commands[208];
+extern const guchar commands[208];
 
 // functions that return a value / print nothing (definition in parser.c)
-extern const uint8_t functions[27];
+extern const guchar functions[27];
 
 // relational operators (definition in parser.c)
-extern const uint8_t relop_table[12];
+extern const guchar relop_table[12];
 
 // other keywords (definitions in parser.c)
-extern const uint8_t to_tab[3];
-extern const uint8_t step_tab[5];
-extern const uint8_t highlow_tab[12];
+extern const guchar to_tab[3];
+extern const guchar step_tab[5];
+extern const guchar highlow_tab[12];
 
 LINE_LENGTH linelen;
 LINE_NUMBER linenum;
 
-uint8_t program_space[MEMORY_SIZE];
-uint8_t input_buffer[INPUT_BUFFER_SIZE];
+guchar program_space[MEMORY_SIZE];
+guchar input_buffer[INPUT_BUFFER_SIZE];
 
-uint8_t *variables_ptr;
-uint8_t *stack_ptr;
-uint8_t *line_ptr;
-uint8_t *text_ptr;
-uint8_t *prog_end_ptr;
-uint8_t *stack_limit;
-uint8_t error_code;
+guchar *variables_ptr;
+guchar *stack_ptr;
+guchar *line_ptr;
+guchar *text_ptr;
+guchar *prog_end_ptr;
+guchar *stack_limit;
+guchar error_code;
 
 
 #endif

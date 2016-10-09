@@ -39,9 +39,9 @@
 void get_line (void)
 {
         text_ptr = prog_end_ptr + sizeof (uint16_t);
-        uint8_t *maxpos = text_ptr;
+        guchar *maxpos = text_ptr;
 
-        uint8_t temp1, temp2;
+        guchar temp1, temp2;
         guint in_char;
 
         while (1) {
@@ -50,8 +50,8 @@ void get_line (void)
                         if (text_ptr == variables_ptr - 2)
                                 do_beep();
                         else {
-                                g_print("%c", (uint8_t) in_char);
-                                text_ptr[0] = (uint8_t) in_char;
+                                g_print("%c", (guchar) in_char);
+                                text_ptr[0] = (guchar) in_char;
                                 text_ptr++;
                                 if (text_ptr > maxpos)
                                         maxpos = text_ptr;
@@ -148,11 +148,11 @@ void init_io (void)
 /** ***************************************************************************
  * @brief Put character top selected stream.
  *****************************************************************************/
-guint emu_putchar (guint out_char, uint8_t stream)
+guint emu_putchar (guchar out_char, guchar stream)
 {
         switch (stream) {
                 case STREAM_STD:
-                        g_print("%c", out_char);
+                        vid_put_character((guchar)out_char);
                         break;
                 case STREAM_APU:
                         g_print("%c", out_char);
@@ -169,7 +169,7 @@ guint emu_putchar (guint out_char, uint8_t stream)
 /** ***************************************************************************
  * @brief Get character from selected stream.
  *****************************************************************************/
-guint emu_getchar (uint8_t stream)
+guint emu_getchar (guchar stream)
 {
         switch (stream) {
                 case STREAM_STD:
@@ -261,7 +261,7 @@ void do_beep (void)
  * This function sends to the graphics subsystem the necessary control byte,
  * along with the selected "text" colour.
  *****************************************************************************/
-void text_color (uint8_t color)
+void text_color (guchar color)
 {
 //        g_print("%c", vid_color);
 //        g_print("%c", color);
@@ -273,7 +273,7 @@ void text_color (uint8_t color)
  * This function sends to the graphics subsystem the necessary control byte,
  * along with the selected background colour -- paper colour, anyone?
  *****************************************************************************/
-void paper_color (uint8_t color)
+void paper_color (guchar color)
 {
 //        g_print("%c", vid_paper);
 //        g_print("%c", color);
@@ -285,7 +285,7 @@ void paper_color (uint8_t color)
  * This function sends to the graphics subsystem the necessary control byte,
  * along with the new location of the cursor.
  *****************************************************************************/
-void locate_cursor (uint8_t line, uint8_t column)
+void locate_cursor (guchar line, guchar column)
 {
 //        g_print("%c", vid_locate);
 //        g_print("%c", line);
@@ -298,7 +298,7 @@ void locate_cursor (uint8_t line, uint8_t column)
  * This function sends to the graphics subsystem the necessary control byte,
  * along with data describing the new pixel (position and colour).
  *****************************************************************************/
-void put_pixel (uint8_t x, uint8_t y, uint8_t color)
+void put_pixel (guchar x, guchar y, guchar color)
 {
 //        g_print("%c", vid_pixel);
 //        g_print("%c", x);

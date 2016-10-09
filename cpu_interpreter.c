@@ -36,7 +36,7 @@
 
 #include "cpu_interpreter.h"
 
-static uint8_t execution (void);
+static guchar execution (void);
 static void warm_reset (void);
 static void insert_line (void);
 static void remove_line (void);
@@ -44,7 +44,7 @@ static void move_line (void);
 static void prep_line (void);
 static void error_message (void);
 
-static uint8_t *start;
+static guchar *start;
 
 /** ***************************************************************************
  * @brief Get current line number.
@@ -93,7 +93,7 @@ void init_basic (void)
  *****************************************************************************/
 void interpreter (void)
 {
-    uint8_t exec_status;
+    guchar exec_status;
 
     /* start interpreter with a warm-reset */
     exec_status = POST_CMD_WARM_RESET;
@@ -184,10 +184,10 @@ void interpreter (void)
  * When running a program, @c text_ptr is advanced automatically.
  * @return The post-execution status. See EXECUTION_STATUS enumerator.
  *****************************************************************************/
-static uint8_t execution (void)
+static guchar execution (void)
 {
-    uint8_t index;
-    uint8_t cmd_status;
+    guchar index;
+    guchar cmd_status;
 
     while(1) {
         if (break_test()) {
@@ -382,7 +382,7 @@ static void warm_reset (void)
  *****************************************************************************/
 static void insert_line (void)
 {
-        uint8_t *source, *dest, *new_end;
+        guchar *source, *dest, *new_end;
         uint16_t tomove, room_to_make;
 
         while (linelen > 0) {
@@ -426,7 +426,7 @@ static void remove_line (void)
 {
     if (start != prog_end_ptr && * ((uint16_t *)start) == linenum) {
         // calculate the space taken by the line to be deleted
-                uint8_t *dest, *from;
+                guchar *dest, *from;
                 uint16_t tomove;
                 from = start + start[sizeof (uint16_t)];
                 dest = start;
@@ -457,8 +457,8 @@ static void move_line (void)
         text_ptr++;
 
         /* move line to the end of program_misc_print_memory */
-        uint8_t *dest;
-        dest = (uint8_t *)variables_ptr - 1;
+        guchar *dest;
+        dest = (guchar *)variables_ptr - 1;
         while (1) {
                 *dest = *text_ptr;
                 if (text_ptr == prog_end_ptr + sizeof (uint16_t))
@@ -513,11 +513,11 @@ static void error_message (void)
             printmsg_noNL (err_msg02, active_stream);
             if (line_ptr != NULL) {
                 printf (" -- ");
-                uint8_t tmp = *text_ptr;
+                guchar tmp = *text_ptr;
                 if (*text_ptr != LF)
                     *text_ptr = '^';
 
-                uint8_t *list = line_ptr;
+                guchar *list = line_ptr;
                 printline (list, active_stream);
                 *text_ptr = tmp;
             }

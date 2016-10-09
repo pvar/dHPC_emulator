@@ -28,24 +28,24 @@
 #include "cpu_parser.h"
 
 void init_video (void);
-void vid_put_character (uint8_t chr);
-uint8_t vid_reset (void);
-uint8_t vid_clear (void);
-uint8_t vid_set_pen_colour (void);
-uint8_t vid_set_paper_colour(void);
-uint8_t vid_locate_cursor (void);
-uint8_t vid_put_pixel (void);
+void vid_put_character (guchar chr);
+guchar vid_reset (void);
+guchar vid_clear (void);
+guchar vid_set_pen_colour (void);
+guchar vid_set_paper_colour(void);
+guchar vid_locate_cursor (void);
+guchar vid_put_pixel (void);
 
 
 
-const uint8_t logoimg[728];
-const uint8_t fontdata[950];
+const guchar logoimg[728];
+const guchar fontdata[950];
 
 #define CHAR_PER_LINE 32
 #define TEXT_COL_DEFAULT 7
 #define BACK_COL_DEFAULT 0
 #define TEXT_COL_ERROR 3
 
-uint8_t cursor_x, cursor_y;
+guchar cursor_x, cursor_y;
 
 #endif

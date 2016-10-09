@@ -25,20 +25,20 @@ void init_io (void);
 void do_beep (void);
 
 void uart_ansi_rst_clr (void);
-void uart_ansi_move_cursor (uint8_t row, uint8_t col);
+void uart_ansi_move_cursor (guchar row, guchar col);
 
-void text_color (uint8_t color);
-void paper_color (uint8_t color);
-void locate_cursor (uint8_t line, uint8_t column);
-void put_pixel (uint8_t x, uint8_t y, uint8_t color);
+void text_color (guchar color);
+void paper_color (guchar color);
+void locate_cursor (guchar line, guchar column);
+void put_pixel (guchar x, guchar y, guchar color);
 
-void send_to_apu (uint8_t cbyte);
+void send_to_apu (guchar cbyte);
 void get_line (void);
 
 
 // input / output functions
-guint emu_putchar (guint out_char, uint8_t stream);
-guint emu_getchar (uint8_t stream);
+guint emu_putchar (guchar out_char, guchar stream);
+guint emu_getchar (guchar stream);
 
 guint get_std (void);
 guint get_gpu (void);
@@ -83,6 +83,6 @@ struct input_buffer {
 G_LOCK_DEFINE (keyboard_data);
 
 gint active_stream;
-uint8_t break_flow;
+guchar break_flow;
 
 #endif

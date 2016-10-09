@@ -26,17 +26,17 @@
 #include "cpu_parser.h"
 
 /* FLOW CONTROL */
-uint8_t flow_goto (void);
-uint8_t flow_forloop (void);
-uint8_t flow_next (void);
-uint8_t flow_gosub (void);
-uint8_t flow_return (uint8_t cmd);
+guchar flow_goto (void);
+guchar flow_forloop (void);
+guchar flow_next (void);
+guchar flow_gosub (void);
+guchar flow_return (guchar cmd);
 int8_t  flow_run (void);
 int8_t  flow_end (void);
 
 /* MISCELLANEOUS */
-uint8_t misc_conditional (void);
-uint8_t misc_print (void);
+guchar misc_conditional (void);
+guchar misc_print (void);
 int8_t  misc_list (void);
 int8_t  misc_assignment (void);
 int8_t  misc_clear_program (void);
@@ -49,7 +49,7 @@ int8_t  prng_seed_refresh (void);
 int8_t  prng_seed_define (void);
 
 /* GPIO */
-uint8_t gpio_write_digital (void);
-uint8_t gpio_set_direction (void);
+guchar gpio_write_digital (void);
+guchar gpio_set_direction (void);
 
 #endif

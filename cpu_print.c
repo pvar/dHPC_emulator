@@ -33,40 +33,40 @@
 /// @cond CONST_MESSAGES
 
 // general messages
-const uint8_t msg_welcome[]   = "Welcome to nstBASIC v0.2\0";
-const uint8_t msg_ram_bytes[] = " bytes RAM\0";
-const uint8_t msg_rom_bytes[] = " bytes ROM\0";
-const uint8_t msg_available[] = " bytes available\0";
-const uint8_t msg_break[]     = "Break!\0";
-const uint8_t msg_ok[]        = "OK\0";
+const guchar msg_welcome[]   = "Welcome to nstBASIC v0.2\0";
+const guchar msg_ram_bytes[] = " bytes RAM\0";
+const guchar msg_rom_bytes[] = " bytes ROM\0";
+const guchar msg_available[] = " bytes available\0";
+const guchar msg_break[]     = "Break!\0";
+const guchar msg_ok[]        = "OK\0";
 
 // error messages
-const uint8_t err_msgxl[] = "Left \0";
-const uint8_t err_msgxr[] = "Right \0";
-const uint8_t err_msg01[] = "Not yet implemented\0";
-const uint8_t err_msg02[] = "Syntax error\0";
-const uint8_t err_msg03[] = "Stack overflow\0";
-const uint8_t err_msg04[] = "Unexpected character\0";
-const uint8_t err_msg05[] = "parenthesis missing\0";
-const uint8_t err_msg07[] = "Variable expected\0";
-const uint8_t err_msg08[] = "Jump point not found\0";
-const uint8_t err_msg09[] = "Invalid line number\0";
-const uint8_t err_msg0A[] = "Operator expected\0";
-const uint8_t err_msg0B[] = "Division by zero\0";
-const uint8_t err_msg0C[] = "Invalid pin [0..7]\0";
-const uint8_t err_msg0D[] = "Pin I/O error\0";
-const uint8_t err_msg0E[] = "Unknown function\0";
-const uint8_t err_msg0F[] = "Unknown command\0";
-const uint8_t err_msg10[] = "Invalid coordinates\0";
-const uint8_t err_msg11[] = "Invalid variable name\0";
-const uint8_t err_msg12[] = "Expected byte [0..255]\0";
-const uint8_t err_msg13[] = "Out of range\0";
-const uint8_t err_msg14[] = "Expected color [0..127]\0";
-const uint8_t err_msg15[] = "Expression expected!\0";
+const guchar err_msgxl[] = "Left \0";
+const guchar err_msgxr[] = "Right \0";
+const guchar err_msg01[] = "Not yet implemented\0";
+const guchar err_msg02[] = "Syntax error\0";
+const guchar err_msg03[] = "Stack overflow\0";
+const guchar err_msg04[] = "Unexpected character\0";
+const guchar err_msg05[] = "parenthesis missing\0";
+const guchar err_msg07[] = "Variable expected\0";
+const guchar err_msg08[] = "Jump point not found\0";
+const guchar err_msg09[] = "Invalid line number\0";
+const guchar err_msg0A[] = "Operator expected\0";
+const guchar err_msg0B[] = "Division by zero\0";
+const guchar err_msg0C[] = "Invalid pin [0..7]\0";
+const guchar err_msg0D[] = "Pin I/O error\0";
+const guchar err_msg0E[] = "Unknown function\0";
+const guchar err_msg0F[] = "Unknown command\0";
+const guchar err_msg10[] = "Invalid coordinates\0";
+const guchar err_msg11[] = "Invalid variable name\0";
+const guchar err_msg12[] = "Expected byte [0..255]\0";
+const guchar err_msg13[] = "Out of range\0";
+const guchar err_msg14[] = "Expected color [0..127]\0";
+const guchar err_msg15[] = "Expression expected!\0";
 
 // keyboard connectivity messages
-const uint8_t kb_fail_msg[26] = "Keyboard self-test failed\0";
-const uint8_t kb_success_msg[32] = "Keyboard connected successfully\0";
+const guchar kb_fail_msg[26] = "Keyboard self-test failed\0";
+const guchar kb_success_msg[32] = "Keyboard connected successfully\0";
 
 /// @endcond
 
@@ -75,7 +75,7 @@ const uint8_t kb_success_msg[32] = "Keyboard connected successfully\0";
  *****************************************************************************/
 void printstr (char *string, gint stream)
 {
-    uint8_t i = 0;
+    guchar i = 0;
     while (string[i] != 0) {
         emu_putchar (string[i], stream);
         i++;
@@ -107,7 +107,7 @@ void printnum (int32_t number, gint stream)
 /** ***************************************************************************
  * @brief Print selected message from FLASH (without new-line)
  *****************************************************************************/
-void printmsg_noNL (const uint8_t *message, gint stream)
+void printmsg_noNL (const guchar *message, gint stream)
 {
         while (*(message) != 0)
                 emu_putchar (*(message++), stream);
@@ -116,7 +116,7 @@ void printmsg_noNL (const uint8_t *message, gint stream)
 /** ***************************************************************************
  * @brief Print selected message from FLASH (with new-line)
  *****************************************************************************/
-void printmsg (const uint8_t *message, gint stream)
+void printmsg (const guchar *message, gint stream)
 {
         printmsg_noNL (message, stream);
         newline (stream);
@@ -125,7 +125,7 @@ void printmsg (const uint8_t *message, gint stream)
 /** ***************************************************************************
  * @brief Print a program line
  *****************************************************************************/
-void printline (uint8_t *line, gint stream)
+void printline (guchar *line, gint stream)
 {
         LINE_NUMBER line_num = *((LINE_NUMBER *)(line));
 
@@ -157,10 +157,10 @@ void newline (gint stream)
  * @brief Print a user defined string (enclosed in quotes)
  * @note The opening delimiter of the string is pointed to by @c text_ptr.
  *****************************************************************************/
-uint8_t print_string (void)
+guchar print_string (void)
 {
         uint16_t i = 0;
-        uint8_t delim = *text_ptr;
+        guchar delim = *text_ptr;
         // check for opening delimiter
         if (delim != '"' && delim != '\'')
                 return 0;
@@ -183,7 +183,7 @@ uint8_t print_string (void)
 /** ***************************************************************************
  * @brief Print a hash and the specified character for debug purposes
  *****************************************************************************/
-void debug_print (uint8_t chr)
+void debug_print (guchar chr)
 {
         emu_putchar ('#', active_stream);
         emu_putchar (chr, active_stream);

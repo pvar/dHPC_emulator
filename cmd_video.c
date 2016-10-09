@@ -26,7 +26,7 @@
  * the table contains 95 characters (ASCII #32 to #126)
  * ---------------------------------------------------------------- */
 
-const uint8_t fontdata[950] = {
+const guchar fontdata[950] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     // SPACE
         0x00, 0x10, 0x10, 0x10, 0x10, 0x10, 0x00, 0x10, 0x00, 0x00,     // !
         0x00, 0x24, 0x24, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     // "
@@ -124,7 +124,7 @@ const uint8_t fontdata[950] = {
         0x00, 0x32, 0x4C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00      // ~
 };
 
-const uint8_t logoimg[728] = {
+const guchar logoimg[728] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 255, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 67, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 255, 255, 255, 255, 255, 255, 255, 0, 0,
@@ -149,21 +149,22 @@ void init_video() {
         paper_color (BACK_COL_DEFAULT);
 }
 
-uint8_t vid_reset (void)
+guchar vid_reset (void)
 {
+        vid_clear();
         printmsg (msg_welcome, active_stream);
         prog_end_ptr = program_space;
         return POST_CMD_PROMPT;
 }
 
-uint8_t vid_clear (void)
+guchar vid_clear (void)
 {
         cursor_x = 0;
         cursor_y = 0;
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t vid_set_pen_colour (void)
+guchar vid_set_pen_colour (void)
 {
         uint16_t col;
         // get color value
@@ -174,11 +175,11 @@ uint8_t vid_set_pen_colour (void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        text_color ((uint8_t)col);
+        text_color ((guchar)col);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t vid_set_paper_colour(void)
+guchar vid_set_paper_colour(void)
 {
         uint16_t col;
         // get color value
@@ -189,11 +190,11 @@ uint8_t vid_set_paper_colour(void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        paper_color ((uint8_t)col);
+        paper_color ((guchar)col);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t vid_locate_cursor (void)
+guchar vid_locate_cursor (void)
 {
         uint16_t line, column;
         // get target line
@@ -222,7 +223,7 @@ uint8_t vid_locate_cursor (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t vid_put_pixel (void)
+guchar vid_put_pixel (void)
 {
         uint16_t x, y, col;
         // get x-coordinate
@@ -261,11 +262,11 @@ uint8_t vid_put_pixel (void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        put_pixel ((uint8_t)x, (uint8_t)y, (uint8_t)col);
+        put_pixel ((guchar)x, (guchar)y, (guchar)col);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-void vid_put_character (uint8_t chr)
+void vid_put_character (guchar chr)
 {
 
 
