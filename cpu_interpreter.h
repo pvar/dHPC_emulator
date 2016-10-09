@@ -18,9 +18,9 @@
 #include <stdlib.h>
 
 #include "thread_cpu.h"
-#include "cmd_various.h"
-#include "cmd_video.h"
-#include "cmd_audio.h"
+#include "bas_various.h"
+#include "bas_video.h"
+#include "bas_audio.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

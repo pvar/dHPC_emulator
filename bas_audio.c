@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#include "cmd_audio.h"
+#include "bas_audio.h"
 
 guchar snd_play (void)
 {

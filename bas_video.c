@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#include "cmd_video.h"
+#include "bas_video.h"
 
 /* ----------------------------------------------------------------
  * character matrix: 8 x 10
