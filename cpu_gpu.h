@@ -23,6 +23,7 @@
 #include "io.h"
 #include "interpreter.h"
 #include "printing.h"
+#include "cpu_gpu_data.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

@@ -33,4 +33,7 @@ uint8_t print (void);
 uint8_t locate (void);
 uint8_t pset (void);
 
+const uint8_t logoimg[728];
+const uint8_t fontdata[950];
+
 #endif

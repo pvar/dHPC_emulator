@@ -145,7 +145,6 @@ void init_io (void)
         active_stream = STREAM_STD;
 }
 
-
 /** ***************************************************************************
  * @brief Put character top selected stream.
  *****************************************************************************/
@@ -153,9 +152,6 @@ guint emu_putchar (guint out_char, uint8_t stream)
 {
         switch (stream) {
                 case STREAM_STD:
-                        g_print("%c", out_char);
-                        break;
-                case STREAM_GPU:
                         g_print("%c", out_char);
                         break;
                 case STREAM_APU:
@@ -178,8 +174,6 @@ guint emu_getchar (uint8_t stream)
         switch (stream) {
                 case STREAM_STD:
                         return get_std();
-                case STREAM_GPU:
-                        break;
                 case STREAM_APU:
                         break;
                 case STREAM_SER:
@@ -189,6 +183,10 @@ guint emu_getchar (uint8_t stream)
         }
         return 1;
 }
+
+/** ***************************************************************************
+ * @brief Get character from keyboard buffer
+ *****************************************************************************/
 
 guint get_std (void) {
         static gint rp;

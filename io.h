@@ -65,9 +65,8 @@ guint get_ser (void);
 
 // sudo streams for redirecting IO
 #define STREAM_STD 1
-#define STREAM_GPU 2
-#define STREAM_APU 3
-#define STREAM_SER 4
+#define STREAM_APU 2
+#define STREAM_SER 3
 
 #define KEYBOARD_BUFFER_SIZE 32
 
@@ -85,46 +84,5 @@ G_LOCK_DEFINE (keyboard_data);
 
 gint active_stream;
 uint8_t break_flow;
-
-// ------------------------------------------------------------------------------
-// ASSEMBLER MACROS
-// ------------------------------------------------------------------------------
-
-#define tovga() asm volatile \
-        ( \
-                "sbi 0x0b, 7 \n\t" \
-                "sbis 0x09, 6 \n\t" \
-                "rjmp .-4 \n\t" \
-                "cbi 0x0b, 7 \n\t" \
-        )
-
-#define vgaready() asm volatile \
-        ( \
-                "sbic 0x09, 6 \n\t" \
-                "rjmp .-4 \n\t" \
-        )
-
-#define toapu() asm volatile \
-        ( \
-                "sbi 0x0b, 5 \n\t" \
-                "sbis 0x09, 4 \n\t" \
-                "rjmp .-4 \n\t" \
-                "cbi 0x0b, 5 \n\t" \
-        )
-
-#define apuready() asm volatile \
-        ( \
-                "sbic 0x09, 4 \n\t" \
-                "rjmp .-4 \n\t" \
-        )
-
-#define delay1us() asm volatile \
-        ( \
-                "nop \n\t nop \n\t nop \n\t nop \n\t" \
-                "nop \n\t nop \n\t nop \n\t nop \n\t" \
-                "nop \n\t nop \n\t nop \n\t nop \n\t" \
-                "nop \n\t nop \n\t nop \n\t nop \n\t" \
-                "nop \n\t nop \n\t nop \n\t nop \n\t" \
-        )
 
 #endif

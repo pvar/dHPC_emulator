@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#include "dhpc.h"
+#include "dhpcemu.h"
 
 void key_press_event (GtkWidget *widget, GdkEventKey *event);
 
