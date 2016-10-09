@@ -1,10 +1,10 @@
 /**
- * @file thread_cpu_gpu.h
+ * @file thread_cpu.h
  * @brief Prototypes, macros, enumerators and global variables...
  */
 
-#ifndef THREAD_CPU_GPU_H
-#define THREAD_CPU_GPU_H
+#ifndef THREAD_CPU_H
+#define THREAD_CPU_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
@@ -20,6 +20,7 @@
 #include <math.h>
 #include <termios.h>
 
+#include "dhpcemu.h"
 #include "cpu_io.h"
 #include "cpu_interpreter.h"
 #include "cpu_print.h"
@@ -28,7 +29,7 @@
 // PROTOTYPES
 // ------------------------------------------------------------------------------
 
-gpointer CPU_GPU_thread_init (gpointer data);
+gpointer CPU_thread_init (gpointer data);
 
 // internal data handling
 void uppercase (void);
@@ -57,9 +58,5 @@ guchar * valid_filename (void);
 // ------------------------------------------------------------------------------
 
 guchar sys_config;
-
-guint to_apu;
-
-G_LOCK_DEFINE (to_apu);
 
 #endif

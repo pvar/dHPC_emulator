@@ -19,7 +19,7 @@
 
 
 /**
- * @file parser.c
+ * @file cpu_parser.c
  * @brief Syntactic analysis and expression evaluation.
  *
  * The functions @c parse_expr_s# call each other recursivelly, until the given expression is

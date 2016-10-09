@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-#include "thread_cpu_gpu.h"
+#include "thread_cpu.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES
@@ -67,19 +67,9 @@ guint get_ser (void);
 #define STREAM_APU 2
 #define STREAM_SER 3
 
-#define KEYBOARD_BUFFER_SIZE 32
-
 // ------------------------------------------------------------------------------
 // GLOBALS
 // ------------------------------------------------------------------------------
-
-struct input_buffer {
-       guint buffer [KEYBOARD_BUFFER_SIZE];
-       gint wp;
-       gint cnt;
-} keyboard_data;
-
-G_LOCK_DEFINE (keyboard_data);
 
 gint active_stream;
 guchar break_flow;

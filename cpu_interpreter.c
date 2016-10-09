@@ -18,7 +18,7 @@
  */
 
 /**
- * @file interpreter.c
+ * @file cpu_interpreter.c
  * @brief Get user input, search for commands and execute them.
  *
  * The functions in this file form the core of the interprter, which processes user input

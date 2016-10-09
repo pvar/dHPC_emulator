@@ -18,7 +18,7 @@
  */
 
 /**
- * @file printing.c
+ * @file cpu_print.c
  * @brief Message and other data printing.
  *
  * The functions in this file can print messages, numbers, program listings or arbitrary (user

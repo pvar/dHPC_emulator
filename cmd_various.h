@@ -17,8 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#ifndef CMD_OTHER_H
-#define CMD_OTHER_H
+#ifndef BAS_VARIOUS_H
+#define BAS_VARIOUS_H
 
 #include <stdio.h>
 #include <stdlib.h>

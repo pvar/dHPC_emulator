@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "thread_cpu_gpu.h"
+#include "thread_cpu.h"
 #include "cpu_interpreter.h"
 
 // ------------------------------------------------------------------------------

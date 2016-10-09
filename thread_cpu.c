@@ -18,23 +18,21 @@
  */
 
 /**
- * @file main.c
+ * @file thread_cpu.c
  * @brief Functions that would fit in no other file :)
  */
 
-#include "thread_cpu_gpu.h"
+#include "thread_cpu.h"
 
 /** ***************************************************************************
  * @brief
  *****************************************************************************/
-gpointer CPU_GPU_thread_init (gpointer data)
+gpointer CPU_thread_init (gpointer data)
 {
         init_io();
-
-g_usleep (1500000);
-
-        init_video();
         init_basic();
+
+g_usleep (1000000);
 
         do_beep();
         /* print welcome message */

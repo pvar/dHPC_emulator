@@ -1,5 +1,5 @@
 /*
- * Implementation of audio related commands of nstBASIC.
+ * Implementation of graphics related commands of nstBASIC.
  *
  * Copyright 2016, Panagiotis Varelas <varelaspanos@gmail.com>
  *
@@ -17,17 +17,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#ifndef BAS_AUDIO_H
-#define BAS_AUDIO_H
+#ifndef GPU_BUFFER_H
+#define GPU_BUFFER_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "cpu_interpreter.h"
-#include "cpu_parser.h"
 
-guchar snd_play (void);
-guchar snd_stop (void);
-guchar snd_tempo (void);
-guchar snd_music (void);
+#include "dhpcemu.h"
+
+//void put_character (guchar chr);
+//void draw_printable (guchar chr);
+
+void reset (void);
+void clear (void);
+void set_pen_colour (void);
+void set_paper_colour(void);
+void locate_cursor (void);
+void put_pixel (void);
+
+//struct rgb_triad color_converter (guchar colour);
+
+//const guchar logoimg[728];
+//const guchar fontdata[950];
 
 #endif

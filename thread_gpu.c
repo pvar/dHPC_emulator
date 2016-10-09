@@ -1,5 +1,5 @@
 /*
- * Implementation of audio related commands of nstBASIC.
+ * Fundamental components of nstBASIC.
  *
  * Copyright 2016, Panagiotis Varelas <varelaspanos@gmail.com>
  *
@@ -17,17 +17,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#ifndef BAS_AUDIO_H
-#define BAS_AUDIO_H
+/**
+ * @file thread_cpu.c
+ * @brief Functions that would fit in no other file :)
+ */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "cpu_interpreter.h"
-#include "cpu_parser.h"
+#include "thread_gpu.h"
 
-guchar snd_play (void);
-guchar snd_stop (void);
-guchar snd_tempo (void);
-guchar snd_music (void);
+/** ***************************************************************************
+ * @brief
+ *****************************************************************************/
+gpointer GPU_thread_init (gpointer data)
+{
+        init_video();
 
-#endif
+
+
+        return NULL;
+}
+
+
+void init_video() {
+        //buffer_clear();
+        colour_pen = TEXT_COL_DEFAULT;
+        colour_paper = BACK_COL_DEFAULT;
+}

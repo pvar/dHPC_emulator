@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#include "cmd_video.h"
+#include "gpu_buffer.h"
 
 /* ----------------------------------------------------------------
  * character matrix: 8 x 10
@@ -25,7 +25,7 @@
  *
  * the table contains 95 characters (ASCII #32 to #126)
  * ---------------------------------------------------------------- */
-
+/*
 const guchar fontdata[950] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     // SPACE
         0x00, 0x10, 0x10, 0x10, 0x10, 0x10, 0x00, 0x10, 0x00, 0x00,     // !
@@ -94,7 +94,7 @@ const guchar fontdata[950] = {
         0x00, 0x10, 0x10, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     // `
         0, 0, 0, 56, 4, 60, 68, 68, 56, 0,                              // a
         0, 0, 64, 64, 120, 68, 68, 68, 56, 0,                           // b
-        0, 0, 0, 0, 60, 64, 64, 64, 60, 0,                              // c
+        0, 0, 0, 60, 66, 64, 64, 64, 60, 0,                             // c
         0, 0, 4, 4, 60, 68, 68, 68, 56, 0,
         0, 0, 0, 56, 68, 68, 120, 64, 56, 0,
         0, 0, 60, 64, 64, 120, 64, 64, 64, 0,
@@ -140,132 +140,34 @@ const guchar logoimg[728] = {
         0, 0, 67, 67, 67, 67, 67, 0, 0, 0, 143, 143, 143, 143, 143, 0, 0, 0, 76, 76, 0, 0, 188, 188, 0, 0, 112, 112, 112, 112, 112, 0, 0, 85, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 85, 85, 85, 85, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
+*/
 
 
-
-guchar vid_reset (void)
+void reset (void)
 {
-        vid_clear();
-        printmsg (msg_welcome, active_stream);
-        prog_end_ptr = program_space;
-        return POST_CMD_PROMPT;
 }
 
-guchar vid_clear (void)
+void clear (void)
 {
-        cursor_x = 0;
-        cursor_y = 0;
-        // clear frame buffer
-        return POST_CMD_NEXT_STATEMENT;
 }
 
-guchar vid_set_pen_colour (void)
+void set_pen_colour (void)
 {
-        uint16_t col;
-        // get color value
-        col = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (col < 0 || col > 127) {
-                error_code = 0x14;
-                return POST_CMD_WARM_RESET;
-        }
-        //text_color ((uint8_t)col);
-        colour_pen = (uint8_t)col;
-        return POST_CMD_NEXT_STATEMENT;}
-
-guchar vid_set_paper_colour(void)
-{
-        uint16_t col;
-        // get color value
-        col = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (col < 0 || col > 127) {
-                error_code = 0x14;
-                return POST_CMD_WARM_RESET;
-        }
-        //paper_color ((uint8_t)col);
-        colour_paper = (uint8_t)col;
-        return POST_CMD_NEXT_STATEMENT;
 }
 
-guchar vid_locate_cursor (void)
+void set_paper_colour(void)
 {
-        uint16_t line, column;
-        // get target line
-        line = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (line < 0 || line > 23) {
-                error_code = 0x10;
-                return POST_CMD_WARM_RESET;
-        }
-        // check for comma
-        if (*text_ptr != ',') {
-                error_code = 0x2;
-                return POST_CMD_WARM_RESET;
-        }
-        text_ptr++;
-        // get target line
-        column = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (column < 0 || column > 31) {
-                error_code = 0x10;
-                return POST_CMD_WARM_RESET;
-        }
-        // vid_locate_cursor (line, column);
-        cursor_x = column;
-        cursor_y = line;
-        return POST_CMD_NEXT_STATEMENT;
 }
 
-guchar vid_put_pixel (void)
+void locate_cursor (void)
 {
-        gint x, y;
-        guchar col;
-
-        // get x-coordinate
-        x = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (x < 0 || x > 255) {
-                error_code = 0x10;
-                return POST_CMD_WARM_RESET;
-        }
-        // check for comma
-        if (*text_ptr != ',') {
-                error_code = 0x2;
-                return POST_CMD_WARM_RESET;
-        }
-        text_ptr++;
-        // get y-coordinate
-        y = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (y < 0 || y > 239) {
-                error_code = 0x10;
-                return POST_CMD_WARM_RESET;
-        }
-        // check for comma
-        if (*text_ptr != ',') {
-                error_code = 0x2;
-                return POST_CMD_WARM_RESET;
-        }
-        text_ptr++;
-        // get color
-        col = parse_expr_s1();
-        if (error_code)
-                return POST_CMD_WARM_RESET;
-        if (col < 0 || col > 127) {
-                error_code = 0x14;
-                return POST_CMD_WARM_RESET;
-        }
-        //vid_put_pixel ((guchar)x, (guchar)y, (guchar)col);
-        return POST_CMD_NEXT_STATEMENT;
 }
 
+void put_pixel (void)
+{
+}
+
+/*
 void vid_put_character (guchar chr)
 {
         if ((chr >= 32) && (chr <= 126)) {
@@ -325,7 +227,7 @@ void draw_printable (guchar chr)
                         font_data = font_data << 1;
                 }
         }
-        /* display frame buffer on screen */
+        // display frame buffer on screen
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 
         cursor_x++;
@@ -334,6 +236,7 @@ void draw_printable (guchar chr)
                 cursor_y++; // check if have to scroll!!
         }
 }
+
 
 struct rgb_triad color_converter (guchar colour)
 {
@@ -344,3 +247,4 @@ struct rgb_triad color_converter (guchar colour)
         rgb_colour.blue = ((colour >> 4) & 3) * multiplier;
         return rgb_colour;
 }
+*/

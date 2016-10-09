@@ -17,13 +17,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-#ifndef CMD_SCREEN_H
-#define CMD_SCREEN_H
+#ifndef BAS_VIDEO_H
+#define BAS_VIDEO_H
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dhpcemu.h"
 #include "cpu_interpreter.h"
 #include "cpu_parser.h"
 
@@ -41,7 +40,6 @@ struct rgb_triad {
         guchar blue;
 };
 
-void init_video (void);
 void vid_put_character (guchar chr);
 void draw_printable (guchar chr);
 

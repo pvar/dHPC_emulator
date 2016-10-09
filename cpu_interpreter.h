@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "thread_cpu_gpu.h"
+#include "thread_cpu.h"
 #include "cmd_various.h"
 #include "cmd_video.h"
 #include "cmd_audio.h"

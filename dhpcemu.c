@@ -30,13 +30,18 @@ gint main (int argc, char *argv[])
         /* initialize GTK+ libraries */
         gtk_init(&argc, &argv);
 
-        /* start threads for emulation of sub-systems */
-        g_thread_new ("CPU - GPU thread", CPU_GPU_thread_init, NULL);
+        /* start thread for emulation of CPU */
+        g_thread_new ("CPU thread", CPU_thread_init, NULL);
+
+        /* start thread for emulation of APU */
         //g_thread_new ("APU thread", APU_thread_init, NULL);
 
-        /* build UI from XML file */
+        /* build UI from XML file and prepare buffers */
         if(build_ui() == FALSE)
                 return 1;
+
+        /* start thread for emulation of GPU */
+        g_thread_new ("GPU thread", GPU_thread_init, NULL);
 
         /* display main window */
         gtk_widget_show(dhpc->window);
@@ -86,10 +91,12 @@ gint build_ui (void)
         dhpc->pixelbuffer = gdk_pixbuf_get_pixels(dhpc->framebuffer);
 
         /* pixel manipulation example: a white dot in the middle of the screen */
+        /*
         guchar *pixel = &dhpc->pixelbuffer[(120 * FB_WIDTH + 128) * 3];
         *pixel     = 240;
         *(pixel+1) = 120;
         *(pixel+2) = 32;
+        */
 
         /* display frame buffer on screen */
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
