@@ -38,10 +38,10 @@
  *****************************************************************************/
 void get_line (void)
 {
-        text_ptr = prog_end_ptr + sizeof (uint16_t);
+        text_ptr = prog_end_ptr + sizeof (LINE_NUMBER);
         guchar *maxpos = text_ptr;
 
-        guchar temp1, temp2;
+        guint temp1, temp2;
         guint in_char;
 
         while (1) {
@@ -50,7 +50,7 @@ void get_line (void)
                         if (text_ptr == variables_ptr - 2)
                                 do_beep();
                         else {
-                                g_print("%c", (guchar) in_char);
+                                emu_putchar((guchar) in_char, active_stream);
                                 text_ptr[0] = (guchar) in_char;
                                 text_ptr++;
                                 if (text_ptr > maxpos)
@@ -218,32 +218,6 @@ guint get_std (void) {
         return input_char;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** ***************************************************************************
  * @brief BEEP or flash the screen.
  *
@@ -253,57 +227,6 @@ guint get_std (void) {
 void do_beep (void)
 {
         // make beep or flash screen
-}
-
-/** ***************************************************************************
- * @brief Change on-screen text colour.
- *
- * This function sends to the graphics subsystem the necessary control byte,
- * along with the selected "text" colour.
- *****************************************************************************/
-void text_color (guchar color)
-{
-//        g_print("%c", vid_color);
-//        g_print("%c", color);
-}
-
-/** ***************************************************************************
- * @brief Change on-screen background colour.
- *
- * This function sends to the graphics subsystem the necessary control byte,
- * along with the selected background colour -- paper colour, anyone?
- *****************************************************************************/
-void paper_color (guchar color)
-{
-//        g_print("%c", vid_paper);
-//        g_print("%c", color);
-}
-
-/** ***************************************************************************
- * @brief Move cursor to arbitrary location.
- *
- * This function sends to the graphics subsystem the necessary control byte,
- * along with the new location of the cursor.
- *****************************************************************************/
-void locate_cursor (guchar line, guchar column)
-{
-//        g_print("%c", vid_locate);
-//        g_print("%c", line);
-//        g_print("%c", column);
-}
-
-/** ***************************************************************************
- * @brief Draw a pixel on the screen.
- *
- * This function sends to the graphics subsystem the necessary control byte,
- * along with data describing the new pixel (position and colour).
- *****************************************************************************/
-void put_pixel (guchar x, guchar y, guchar color)
-{
-//        g_print("%c", vid_pixel);
-//        g_print("%c", x);
-//        g_print("%c", y);
-//        g_print("%c", color);
 }
 
 

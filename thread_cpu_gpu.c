@@ -30,11 +30,13 @@
 gpointer CPU_GPU_thread_init (gpointer data)
 {
         init_io();
+
+g_usleep (1500000);
+
         init_video();
         init_basic();
 
         do_beep();
-
         /* print welcome message */
         printmsg (msg_welcome, active_stream);
         /* print (available) SRAM size */
@@ -75,7 +77,7 @@ guchar *find_line (void)
         while (1) {
                 if (line == prog_end_ptr)
                         return line;
-                if ( ((uint16_t *)line)[0] >= linenum)
+                if ( ((LINE_NUMBER *)line)[0] >= linenum)
                         return line;
                 // add line's lenght (this value is stored exactly after line number0
                 line += line[ sizeof (LINE_NUMBER) ];
@@ -94,7 +96,7 @@ void ignorespace (void)
 
 void uppercase (void)
 {
-        guchar *c = prog_end_ptr + sizeof (uint16_t);
+        guchar *c = prog_end_ptr + sizeof (LINE_NUMBER);
         guchar quote = 0;
         while (*c != LF) {
                 // are we in a quoted string?

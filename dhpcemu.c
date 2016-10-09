@@ -82,14 +82,14 @@ gint build_ui (void)
         dhpc->screen = GTK_IMAGE(gtk_builder_get_object(appgui, "dhpc_screen"));
 
         /* initialize pixel and frame buffer */
-        dhpc->framebuffer = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, WIDTH, HEIGHT);
+        dhpc->framebuffer = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, FB_WIDTH, FB_HEIGHT);
         dhpc->pixelbuffer = gdk_pixbuf_get_pixels(dhpc->framebuffer);
 
         /* pixel manipulation example: a white dot in the middle of the screen */
-        guchar *pixel = &dhpc->pixelbuffer[(240 * WIDTH + 256) * 3];
-        *pixel     = 250;
-        *(pixel+1) = 250;
-        *(pixel+2) = 250;
+        guchar *pixel = &dhpc->pixelbuffer[(120 * FB_WIDTH + 128) * 3];
+        *pixel     = 240;
+        *(pixel+1) = 120;
+        *(pixel+2) = 32;
 
         /* display frame buffer on screen */
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);

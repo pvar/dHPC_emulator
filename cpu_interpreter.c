@@ -151,7 +151,7 @@ void interpreter (void)
             /* no line number --> execute it immediately */
             else {
                 break_flow = 0;
-                text_ptr = prog_end_ptr + sizeof (uint16_t);
+                text_ptr = prog_end_ptr + sizeof (LINE_NUMBER);
                 if (*text_ptr == LF)
                     continue;
                 else
@@ -428,7 +428,7 @@ static void remove_line (void)
         // calculate the space taken by the line to be deleted
                 guchar *dest, *from;
                 uint16_t tomove;
-                from = start + start[sizeof (uint16_t)];
+                from = start + start[sizeof (LINE_NUMBER)];
                 dest = start;
         // copy onver remaing code
                 tomove = prog_end_ptr - from;
@@ -452,7 +452,7 @@ static void remove_line (void)
 static void move_line (void)
 {
         /* find end of new line */
-        text_ptr = prog_end_ptr + sizeof (uint16_t);
+        text_ptr = prog_end_ptr + sizeof (LINE_NUMBER);
         while (*text_ptr != LF)
         text_ptr++;
 
@@ -461,7 +461,7 @@ static void move_line (void)
         dest = (guchar *)variables_ptr - 1;
         while (1) {
                 *dest = *text_ptr;
-                if (text_ptr == prog_end_ptr + sizeof (uint16_t))
+                if (text_ptr == prog_end_ptr + sizeof (LINE_NUMBER))
             break;
                 dest--;
                 text_ptr--;
@@ -503,8 +503,11 @@ static void prep_line (void)
  *****************************************************************************/
 static void error_message (void)
 {
-        text_color (TEXT_COL_ERROR);
-        paper_color (0);
+        //text_color (TEXT_COL_ERROR);
+        //paper_color (BACK_COL_DEFAULT);
+colour_pen = TEXT_COL_ERROR;
+colour_paper = BACK_COL_DEFAULT;
+
         switch (error_code) {
         case 0x1:       // not yet implemented
             printmsg (err_msg01, active_stream);
@@ -583,6 +586,10 @@ static void error_message (void)
             printmsg (err_msg15, active_stream);
             break;
         }
-        text_color (TEXT_COL_DEFAULT);
-        paper_color (BACK_COL_DEFAULT);
+        //text_color (TEXT_COL_DEFAULT);
+        //paper_color (BACK_COL_DEFAULT);
+
+colour_pen = TEXT_COL_DEFAULT;
+colour_paper = BACK_COL_DEFAULT;
+
 }

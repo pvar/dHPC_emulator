@@ -150,7 +150,6 @@ void printline (guchar *line, gint stream)
 void newline (gint stream)
 {
         emu_putchar (LF, stream);
-//        emu_putchar (CR, active_stream);
 }
 
 /** ***************************************************************************

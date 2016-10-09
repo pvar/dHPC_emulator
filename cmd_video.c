@@ -145,8 +145,8 @@ const guchar logoimg[728] = {
 
 void init_video() {
         vid_clear();
-        text_color (TEXT_COL_DEFAULT);
-        paper_color (BACK_COL_DEFAULT);
+        colour_pen = TEXT_COL_DEFAULT;
+        colour_paper = BACK_COL_DEFAULT;
 }
 
 guchar vid_reset (void)
@@ -161,6 +161,7 @@ guchar vid_clear (void)
 {
         cursor_x = 0;
         cursor_y = 0;
+        // clear frame buffer
         return POST_CMD_NEXT_STATEMENT;
 }
 
@@ -175,9 +176,9 @@ guchar vid_set_pen_colour (void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        text_color ((guchar)col);
-        return POST_CMD_NEXT_STATEMENT;
-}
+        //text_color ((uint8_t)col);
+        colour_pen = (uint8_t)col;
+        return POST_CMD_NEXT_STATEMENT;}
 
 guchar vid_set_paper_colour(void)
 {
@@ -190,7 +191,8 @@ guchar vid_set_paper_colour(void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        paper_color ((guchar)col);
+        //paper_color ((uint8_t)col);
+        colour_paper = (uint8_t)col;
         return POST_CMD_NEXT_STATEMENT;
 }
 
@@ -219,13 +221,17 @@ guchar vid_locate_cursor (void)
                 error_code = 0x10;
                 return POST_CMD_WARM_RESET;
         }
-        locate_cursor (line, column);
+        // vid_locate_cursor (line, column);
+        cursor_x = column;
+        cursor_y = line;
         return POST_CMD_NEXT_STATEMENT;
 }
 
 guchar vid_put_pixel (void)
 {
-        uint16_t x, y, col;
+        gint x, y;
+        guchar col;
+
         // get x-coordinate
         x = parse_expr_s1();
         if (error_code)
@@ -262,12 +268,85 @@ guchar vid_put_pixel (void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        put_pixel ((guchar)x, (guchar)y, (guchar)col);
+        //vid_put_pixel ((guchar)x, (guchar)y, (guchar)col);
         return POST_CMD_NEXT_STATEMENT;
 }
 
 void vid_put_character (guchar chr)
 {
+        if ((chr >= 32) && (chr <= 126)) {
+                draw_printable (chr);
+                return;
+        }
 
+        switch (chr) {
+                case LF:
+                case CR:
+                        break;
+                case TAB:
+                        break;
+                case SPACE:
+                        break;
+                case BS:
+                        break;
+                case HOME:
+                        break;
+                case END:
+                        break;
+                case AR_LFT:
+                        break;
+                case AR_RGT:
+                        break;
+        }
+}
 
+void draw_printable (guchar chr)
+{
+        guchar font_line, font_data, pxl_ptr;
+        guchar *pixel;
+        gint pixel_col, pixel_row, fb_offset;
+        struct rgb_triad paper;
+        struct rgb_triad pen;
+
+        pen = color_converter (colour_pen);
+        paper = color_converter (colour_paper);
+
+        for (font_line = 0; font_line < 10; font_line++) {
+                pixel_col = cursor_x * 8;
+                pixel_row = cursor_y * 10 + font_line;
+                fb_offset = pixel_row * FB_WIDTH + pixel_col;
+
+                font_data = fontdata[(chr - 32) * 10 + font_line];
+                for (pxl_ptr = 0; pxl_ptr < 8; pxl_ptr++) {
+                        pixel = &dhpc->pixelbuffer[(fb_offset + pxl_ptr) * 3];
+                        if (font_data & 128) {
+                                *pixel     = 200;//pen.red;
+                                *(pixel+1) = pen.green;
+                                *(pixel+2) = pen.blue;
+                        } else {
+                                *pixel     = paper.red;
+                                *(pixel+1) = paper.green;
+                                *(pixel+2) = paper.blue;
+                        }
+                        font_data = font_data << 1;
+                }
+        }
+        /* display frame buffer on screen */
+        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+
+        cursor_x++;
+        if (cursor_x == CHAR_PER_LINE) {
+                cursor_x = 0;
+                cursor_y++; // check if have to scroll!!
+        }
+}
+
+struct rgb_triad color_converter (guchar colour)
+{
+        struct rgb_triad rgb_colour;
+        guchar multiplier = ((colour >> 6) & 3);
+        rgb_colour.red = (colour & 3) * multiplier;
+        rgb_colour.green = ((colour >> 2) & 3) * multiplier;
+        rgb_colour.blue = ((colour >> 4) & 3) * multiplier;
+        return rgb_colour;
 }

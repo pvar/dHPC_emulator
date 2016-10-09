@@ -45,8 +45,9 @@ void interpreter (void);
 #define MEMORY_SIZE 65526       // 64 kB
 #define INPUT_BUFFER_SIZE 8     // 8 Byte
 #define MAX_FRAME_COUNT 10
-#define STACK_SIZE (sizeof( struct stack_for_frame ) * MAX_FRAME_COUNT)
-#define VAR_SIZE sizeof( int16_t )
+
+#define STACK_SIZE (sizeof(struct stack_for_frame) * MAX_FRAME_COUNT)
+#define VAR_SIZE sizeof(int16_t)
 
 #define STACK_GOSUB_FLAG 'G'
 #define STACK_FOR_FLAG 'F'

@@ -98,4 +98,5 @@ enum OPERATORS {
         RELOP_UNKNOWN
 };
 
+const guchar commands[208];
 #endif

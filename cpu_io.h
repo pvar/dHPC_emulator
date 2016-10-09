@@ -27,11 +27,6 @@ void do_beep (void);
 void uart_ansi_rst_clr (void);
 void uart_ansi_move_cursor (guchar row, guchar col);
 
-void text_color (guchar color);
-void paper_color (guchar color);
-void locate_cursor (guchar line, guchar column);
-void put_pixel (guchar x, guchar y, guchar color);
-
 void send_to_apu (guchar cbyte);
 void get_line (void);
 
@@ -62,6 +57,10 @@ guint get_ser (void);
 // other special characters (arbitrarily defined)
 #define CTRL_L          0xf0    // CTRL+L
 #define CTRL_G          0xf1    // CTRL+G
+#define HOME            0xf2    // HOME
+#define END             0xf3    // END
+#define AR_LFT          0xf4    // ARROW LEFT
+#define AR_RGT          0xf5    // ARROW RIGHT
 
 // sudo streams for redirecting IO
 #define STREAM_STD 1

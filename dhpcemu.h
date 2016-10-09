@@ -1,5 +1,5 @@
-#ifndef _DHPC_EMU_H
-#define _DHPC_EMU_H
+#ifndef DHPC_EMU_H
+#define DHPC_EMU_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
@@ -26,8 +26,8 @@ gint build_ui ( void );
 
 #define GUIXML "dhpcemu.glade"
 
-#define WIDTH 512
-#define HEIGHT 480
+#define FB_WIDTH 512
+#define FB_HEIGHT 480
 
 // ------------------------------------------------------------------------------
 // GLOBALS
