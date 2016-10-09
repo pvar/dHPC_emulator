@@ -31,8 +31,12 @@ gpointer CPU_GPU_thread_init (gpointer data)
 {
         /* start nstBASIC interpreter */
         init_io();
-        text_color (TXT_COL_DEFAULT);
-        paper_color (0);
+
+        cursor_x = 0;
+        cursor_y = 0;
+
+        text_color (TEXT_COL_DEFAULT);
+        paper_color (BACK_COL_DEFAULT);
         printmsg (msg_welcome, active_stream);
         do_beep();
         basic_init();

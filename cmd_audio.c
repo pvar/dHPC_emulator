@@ -19,27 +19,27 @@
 
 #include "cmd_audio.h"
 
-uint8_t play (void)
+uint8_t snd_play (void)
 {
 //        send_to_apu (snd_play);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t stop (void)
+uint8_t snd_stop (void)
 {
 //        send_to_apu (snd_stop);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t tempo (void)
+uint8_t snd_tempo (void)
 {
-                uint16_t specified_tempo;
-                ignorespace();
-                specified_tempo = parse_expr_s1();
-                if (error_code) {
-            return POST_CMD_WARM_RESET;
-        }
-                switch (specified_tempo) {
+        uint16_t specified_tempo;
+        ignorespace();
+        specified_tempo = parse_expr_s1();
+        if (error_code)
+                return POST_CMD_WARM_RESET;
+
+        switch (specified_tempo) {
             case 60:
               //send_to_apu (snd_tempo);
               //send_to_apu (0);
@@ -56,68 +56,68 @@ uint8_t tempo (void)
                 //send_to_apu (snd_tempo);
                 //send_to_apu (24);
                 break;
-                }
+        }
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t music (void)
+uint8_t snd_music (void)
 {
-                uint8_t delim;
-                ignorespace();
-                error_code = 0;
-                delim = *text_ptr;
-                // check for opening delimiter
-                if (delim != '"' && delim != '\'') {
-                        error_code = 0x2;
-            return POST_CMD_WARM_RESET;
-                }
-                text_ptr++;
-                // loop until closing delimiter
-                while (*text_ptr != delim) {
-                        switch (*text_ptr) {
-                case 'Y':       // enable channel
-                case 'y':
-                case 'A':
-                case 'a':
-                    //send_to_apu (snd_ena);
-                    parse_channel();
-                    break;
-                case 'N':       // disable channel
-                case 'n':
-                case 'D':
-                case 'd':
-                    //send_to_apu (snd_dis);
-                    parse_channel();
-                    break;
-                case 'X':       // clear channel
-                case 'x':
-                case 'C':
-                case 'c':
-                    //send_to_apu (snd_clr);
-                    parse_channel();
-                    break;
-                case 'M':       // insert melody
-                case 'm':
-                case 'E':
-                case 'e':
-                    //send_to_apu (snd_notes);
-                    parse_channel();
-                    if (error_code != 0)
-                        break;
-                    parse_notes();
-                    break;
-                default:
-                    error_code = 0x4;
-                    break;
-                        }
-                        if (error_code != 0) {
-                                //send_to_apu (snd_abort);
+        uint8_t delim;
+        ignorespace();
+        error_code = 0;
+        delim = *text_ptr;
+        // check for opening delimiter
+        if (delim != '"' && delim != '\'') {
+                error_code = 0x2;
                 return POST_CMD_WARM_RESET;
-                        }
-                        // process next character
-                        text_ptr++;
+        }
+        text_ptr++;
+        // loop until closing delimiter
+        while (*text_ptr != delim) {
+                switch (*text_ptr) {
+                        case 'Y':       // enable channel
+                        case 'y':
+                        case 'A':
+                        case 'a':
+                            //send_to_apu (snd_ena);
+                            parse_channel();
+                            break;
+                        case 'N':       // disable channel
+                        case 'n':
+                        case 'D':
+                        case 'd':
+                            //send_to_apu (snd_dis);
+                            parse_channel();
+                            break;
+                        case 'X':       // clear channel
+                        case 'x':
+                        case 'C':
+                        case 'c':
+                            //send_to_apu (snd_clr);
+                            parse_channel();
+                            break;
+                        case 'M':       // insert melody
+                        case 'm':
+                        case 'E':
+                        case 'e':
+                            //send_to_apu (snd_notes);
+                            parse_channel();
+                            if (error_code != 0)
+                                break;
+                            parse_notes();
+                            break;
+                        default:
+                            error_code = 0x4;
+                            break;
                 }
-                // skip closing delimiter
+                if (error_code != 0) {
+                        //send_to_apu (snd_abort);
+                        return POST_CMD_WARM_RESET;
+                }
+                // process next character
                 text_ptr++;
+        }
+        // skip closing delimiter
+        text_ptr++;
         return POST_CMD_NEXT_STATEMENT;
 }

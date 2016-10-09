@@ -25,9 +25,9 @@
 #include "interpreter.h"
 #include "parser.h"
 
-uint8_t play (void);
-uint8_t stop (void);
-uint8_t tempo (void);
-uint8_t music (void);
+uint8_t snd_play (void);
+uint8_t snd_stop (void);
+uint8_t snd_tempo (void);
+uint8_t snd_music (void);
 
 #endif

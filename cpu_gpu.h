@@ -23,7 +23,6 @@
 #include "io.h"
 #include "interpreter.h"
 #include "printing.h"
-#include "cpu_gpu_data.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES
@@ -60,9 +59,7 @@ uint8_t * valid_filename (void);
 uint8_t sys_config;
 
 guint to_apu;
-guint from_apu;
 
 G_LOCK_DEFINE (to_apu);
-G_LOCK_DEFINE (from_apu);
 
 #endif

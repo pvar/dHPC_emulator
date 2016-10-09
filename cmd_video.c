@@ -142,21 +142,20 @@ const uint8_t logoimg[728] = {
 };
 
 
-uint8_t reset_display (void)
+
+uint8_t vid_reset (void)
 {
-//        putchar (vid_reset);
         printmsg (msg_welcome, active_stream);
         prog_end_ptr = program_space;
         return POST_CMD_PROMPT;
 }
 
-uint8_t clear_screen (void)
+uint8_t vid_clear (void)
 {
-//        putchar (vid_clear);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t pen (void)
+uint8_t vid_set_pen_colour (void)
 {
         uint16_t col;
         // get color value
@@ -171,7 +170,7 @@ uint8_t pen (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t paper (void)
+uint8_t vid_set_paper_colour(void)
 {
         uint16_t col;
         // get color value
@@ -186,7 +185,7 @@ uint8_t paper (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t locate (void)
+uint8_t vid_locate_cursor (void)
 {
         uint16_t line, column;
         // get target line
@@ -215,54 +214,7 @@ uint8_t locate (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-uint8_t print (void)
-{
-        // If we have an empty list then just put out a LF
-        if (*text_ptr == ':') {
-                newline (active_stream);
-                text_ptr++;
-        return POST_CMD_NEXT_STATEMENT;
-        }
-        if (*text_ptr == LF)
-        return POST_CMD_NEXT_LINE;
-        while (1) {
-                ignorespace();
-                if (print_string())
-                        ;
-                else if (*text_ptr == '"' || *text_ptr == '\'') {
-                        error_code = 0x4;
-                        return POST_CMD_WARM_RESET;
-                } else {
-                        uint16_t e;
-                        error_code = 0;
-                        e = parse_expr_s1();
-                        if (error_code) {
-                                return POST_CMD_WARM_RESET;
-                        }
-                        printnum (e, active_stream);
-                }
-                ignorespace();
-                // skip comma and continue printing
-                if (*text_ptr == ',')
-                        text_ptr++;
-                // stop printing without newline
-                else if (text_ptr[0] == ';' && (text_ptr[1] == LF || text_ptr[1] == ':')) {
-                        text_ptr++;
-                        break;
-                // stop printing with newline
-                } else if (*text_ptr == LF || *text_ptr == ':') {
-                        newline (active_stream);
-                        break;
-                // unexpected character...
-                } else {
-                        error_code = 0x2;
-                        return POST_CMD_WARM_RESET;
-                }
-        }
-        return POST_CMD_NEXT_STATEMENT;
-}
-
-uint8_t pset (void)
+uint8_t vid_put_pixel (void)
 {
         uint16_t x, y, col;
         // get x-coordinate
@@ -303,4 +255,10 @@ uint8_t pset (void)
         }
         put_pixel ((uint8_t)x, (uint8_t)y, (uint8_t)col);
         return POST_CMD_NEXT_STATEMENT;
+}
+
+void vid_put_character (uint8_t chr)
+{
+
+
 }

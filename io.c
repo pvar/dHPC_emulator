@@ -68,7 +68,7 @@ void get_line (void)
                                                 ////g_print("%c", vid_tosol);
                                                 // calculate lines to move the cursor up
                                                 temp1 = text_ptr - prog_end_ptr - 2;
-                                                ////g_print("%c", temp1 / MAXCPL + 1);
+                                                ////g_print("%c", temp1 / CHAR_PER_LINE + 1);
                                                 text_ptr = prog_end_ptr + 2;
                                         }
                                         break;
@@ -80,10 +80,10 @@ void get_line (void)
                                                 // chars from start of line
                                                 temp2 = text_ptr - prog_end_ptr - 2;
                                                 // calculate line-ending row
-                                                temp2 = temp1 / MAXCPL - temp2 / MAXCPL;
+                                                temp2 = temp1 / CHAR_PER_LINE - temp2 / CHAR_PER_LINE;
                                                 g_print("%c", temp2 + 1);
                                                 // calculate line-ending column
-                                                temp2 = temp1 - (temp1 / MAXCPL) * MAXCPL;
+                                                temp2 = temp1 - (temp1 / CHAR_PER_LINE) * CHAR_PER_LINE;
                                                 g_print("%c", temp2);
                                                 text_ptr = maxpos;
                                         }

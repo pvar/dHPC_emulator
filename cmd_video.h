@@ -25,15 +25,23 @@
 #include "interpreter.h"
 #include "parser.h"
 
-uint8_t reset_display (void);
-uint8_t clear_screen (void);
-uint8_t pen (void);
-uint8_t paper (void);
-uint8_t print (void);
-uint8_t locate (void);
-uint8_t pset (void);
+uint8_t vid_reset (void);
+uint8_t vid_clear (void);
+uint8_t vid_set_pen_colour (void);
+uint8_t vid_set_paper_colour(void);
+uint8_t vid_locate_cursor (void);
+uint8_t vid_put_pixel (void);
+void vid_put_character (uint8_t chr);
 
 const uint8_t logoimg[728];
 const uint8_t fontdata[950];
+
+
+#define CHAR_PER_LINE 32
+#define TEXT_COL_DEFAULT 7
+#define BACK_COL_DEFAULT 0
+#define TEXT_COL_ERROR 3
+
+uint8_t cursor_x, cursor_y;
 
 #endif

@@ -20,7 +20,29 @@
 #include "cmd_various.h"
 
 
-uint8_t gotoline (void)
+int8_t flow_run (void)
+{
+        // disable cursor
+        //// g_print("%c", vid_cursor_off);
+        // disable auto scroll
+        //// g_print("%c", vid_scroll_off);
+        line_ptr = program_space;
+        return POST_CMD_EXEC_LINE;
+}
+
+int8_t flow_end (void)
+{
+        // should be at end of line
+        if (text_ptr[0] != LF) {
+                error_code = 0x2;
+                return POST_CMD_WARM_RESET;
+        }
+        // set current line at the end of program
+        line_ptr = prog_end_ptr;
+        return POST_CMD_EXEC_LINE;
+}
+
+uint8_t flow_goto (void)
 {
     linenum = parse_expr_s1();
     if (error_code || *text_ptr != LF) {
@@ -31,21 +53,7 @@ uint8_t gotoline (void)
     return POST_CMD_EXEC_LINE;
 }
 
-uint8_t check (void)
-{
-    uint16_t value;
-    value = parse_expr_s1();
-    if (error_code || *text_ptr == LF) {
-        error_code = 0x4;
-        return POST_CMD_WARM_RESET;
-    }
-    if (value != 0)
-        return POST_CMD_LOOP;
-    else
-        return POST_CMD_NEXT_LINE;
-}
-
-uint8_t loopfor (void)
+uint8_t flow_forloop (void)
 {
         uint8_t index;
                 uint8_t var;
@@ -111,7 +119,7 @@ uint8_t loopfor (void)
     return POST_CMD_WARM_RESET;
 }
 
-uint8_t gosub (void)
+uint8_t flow_gosub (void)
 {
         error_code = 0;
         linenum = parse_expr_s1();
@@ -133,7 +141,7 @@ uint8_t gosub (void)
     return POST_CMD_WARM_RESET;
 }
 
-uint8_t next (void)
+uint8_t flow_next (void)
 {
         // find the variable name
         ignorespace();
@@ -150,7 +158,7 @@ uint8_t next (void)
     return POST_CMD_NOTHING;
 }
 
-uint8_t gosub_return (uint8_t cmd)
+uint8_t flow_return (uint8_t cmd)
 {
     uint8_t *tmp_stack_ptr;
 
@@ -202,10 +210,71 @@ uint8_t gosub_return (uint8_t cmd)
     return POST_CMD_WARM_RESET;
 }
 
+uint8_t misc_print (void)
+{
+        uint8_t status = 0;
 
+        // If we have an empty list then just put out a LF
+        if (*text_ptr == ':') {
+                newline (active_stream);
+                text_ptr++;
+        return POST_CMD_NEXT_STATEMENT;
+        }
+        if (*text_ptr == LF)
+        return POST_CMD_NEXT_LINE;
+        while (1) {
+                ignorespace();
+                status = print_string();
+                if (status == 0) {
+                        if (*text_ptr == '"' || *text_ptr == '\'') {
+                                error_code = 0x4;
+                                return POST_CMD_WARM_RESET;
+                        } else {
+                                uint16_t e;
+                                error_code = 0;
+                                e = parse_expr_s1();
+                                if (error_code)
+                                        return POST_CMD_WARM_RESET;
+                                printnum (e, active_stream);
+                        }
+                }
 
+                ignorespace();
+                // skip comma and continue printing
+                if (*text_ptr == ',')
+                        text_ptr++;
+                // stop printing without newline
+                else if (text_ptr[0] == ';' && (text_ptr[1] == LF || text_ptr[1] == ':')) {
+                        text_ptr++;
+                        break;
+                // stop printing with newline
+                } else if (*text_ptr == LF || *text_ptr == ':') {
+                        newline (active_stream);
+                        break;
+                // unexpected character...
+                } else {
+                        error_code = 0x2;
+                        return POST_CMD_WARM_RESET;
+                }
+        }
+        return POST_CMD_NEXT_STATEMENT;
+}
 
-int8_t input (void)
+uint8_t misc_conditional (void)
+{
+    uint16_t value;
+    value = parse_expr_s1();
+    if (error_code || *text_ptr == LF) {
+        error_code = 0x4;
+        return POST_CMD_WARM_RESET;
+    }
+    if (value != 0)
+        return POST_CMD_LOOP;
+    else
+        return POST_CMD_NEXT_LINE;
+}
+
+int8_t misc_get_value (void)
 {
     uint8_t chr = 0;
     uint8_t cnt = 0;
@@ -279,7 +348,7 @@ int8_t input (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-int8_t assignment (void)
+int8_t misc_assignment (void)
 {
         int16_t value, *var;
         // check if invalid character (non-letter)
@@ -317,7 +386,7 @@ int8_t assignment (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-int8_t poke (void)
+int8_t misc_poke_mem (void)
 {
     int16_t value, address;
     // get the address
@@ -351,12 +420,12 @@ int8_t poke (void)
         error_code = 0x2;
         return POST_CMD_WARM_RESET;
     }
-    // assign value to specified location in memory
+    // assign value to specified location in misc_print_memory
     program_space[address] = value;
         return POST_CMD_NEXT_STATEMENT;
 }
 
-int8_t list (void)
+int8_t misc_list (void)
 {
         linenum = get_linenumber();
 
@@ -376,7 +445,7 @@ int8_t list (void)
         return POST_CMD_WARM_RESET;
 }
 
-int8_t mem (void)
+int8_t misc_print_mem (void)
 {
         // SRAM size
         printnum (variables_ptr - prog_end_ptr, active_stream);
@@ -384,13 +453,24 @@ int8_t mem (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-int8_t randomize (void)
+int8_t misc_clear_program (void)
 {
+        if (text_ptr[0] != LF) {
+                error_code = 0x2;
+                return POST_CMD_WARM_RESET;
+        }
+        prog_end_ptr = program_space;
+        return POST_CMD_PROMPT;
+}
+
+int8_t prng_seed_refresh (void)
+{
+        // TODO: get a random number to be used as seed...!
         srand (2);
         return POST_CMD_NEXT_STATEMENT;
 }
 
-int8_t rndseed (void)
+int8_t prng_seed_define (void)
 {
         uint16_t param;
         error_code = 0;
@@ -402,45 +482,12 @@ int8_t rndseed (void)
         return POST_CMD_NEXT_STATEMENT;
 }
 
-int8_t prog_run (void)
-{
-        // disable cursor
-        //// g_print("%c", vid_cursor_off);
-        // disable auto scroll
-        //// g_print("%c", vid_scroll_off);
-        line_ptr = program_space;
-        return POST_CMD_EXEC_LINE;
-}
-
-int8_t prog_end (void)
-{
-        // should be at end of line
-        if (text_ptr[0] != LF) {
-                error_code = 0x2;
-                return POST_CMD_WARM_RESET;
-        }
-        // set current line at the end of program
-        line_ptr = prog_end_ptr;
-        return POST_CMD_EXEC_LINE;
-}
-
-int8_t prog_new (void)
-{
-        if (text_ptr[0] != LF) {
-                error_code = 0x2;
-                return POST_CMD_WARM_RESET;
-        }
-        prog_end_ptr = program_space;
-        return POST_CMD_PROMPT;
-}
-
-
-uint8_t pindir (void)
+uint8_t gpio_set_direction (void)
 {
         return 0;
 }
 
-uint8_t pindwrite (void)
+uint8_t gpio_write_digital (void)
 {
         return 0;
 }

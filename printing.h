@@ -27,12 +27,4 @@ void newline (gint stream);
 uint8_t print_string (void);
 void debug_print (uint8_t chr);
 
-// ------------------------------------------------------------------------------
-// MACROS
-// ------------------------------------------------------------------------------
-
-#define MAXCPL 32
-#define TXT_COL_DEFAULT 76
-#define TXT_COL_ERROR 3
-
 #endif

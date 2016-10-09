@@ -163,12 +163,12 @@ uint8_t print_string (void)
         uint8_t delim = *text_ptr;
         // check for opening delimiter
         if (delim != '"' && delim != '\'')
-        return 0;
+                return 0;
         text_ptr++;
         // check for closing delimiter
         while (text_ptr[i] != delim) {
                 if (text_ptr[i] == LF)
-            return 0;
+                        return 0;
                 i++;
         }
         // print characters

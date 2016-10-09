@@ -26,29 +26,30 @@
 #include "parser.h"
 
 /* FLOW CONTROL */
-uint8_t gotoline (void);
-uint8_t check (void);
-uint8_t loopfor (void);
-uint8_t gosub (void);
-uint8_t next (void);
-uint8_t gosub_return (uint8_t cmd);
+uint8_t flow_goto (void);
+uint8_t flow_forloop (void);
+uint8_t flow_next (void);
+uint8_t flow_gosub (void);
+uint8_t flow_return (uint8_t cmd);
+int8_t  flow_run (void);
+int8_t  flow_end (void);
 
+/* MISCELLANEOUS */
+uint8_t misc_conditional (void);
+uint8_t misc_print (void);
+int8_t  misc_list (void);
+int8_t  misc_assignment (void);
+int8_t  misc_clear_program (void);
+int8_t  misc_get_value (void);
+int8_t  misc_print_mem (void);
+int8_t  misc_poke_mem (void);
 
-/* VARIOUS */
-int8_t prog_run (void);
-int8_t prog_end (void);
-int8_t prog_new (void);
+/* PRNG */
+int8_t  prng_seed_refresh (void);
+int8_t  prng_seed_define (void);
 
-int8_t assignment (void);
-int8_t input (void);
-int8_t poke (void);
-int8_t mem (void);
-int8_t list (void);
+/* GPIO */
+uint8_t gpio_write_digital (void);
+uint8_t gpio_set_direction (void);
 
-int8_t randomize (void);
-int8_t rndseed (void);
-
-/* PIN CONTROL */
-uint8_t pindwrite (void);
-uint8_t pindir (void);
 #endif

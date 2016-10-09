@@ -24,7 +24,7 @@
  * The functions in this file form the core of the interprter, which processes user input
  * and/or programs. Every line entered by the user, that starts with a valid line-number,
  * is considered part of the currently active program and is stored at the appropriate
- * position in program memory. If the newly entered line does not start with a line-number,
+ * position in program misc_print_memory. If the newly entered line does not start with a line-number,
  * it is executed immediately.
  * @note Although the functions in this file perform some kind of parsing (syntactic analysis),
  * they are kept separately from the main parser functions. The interpreter functions determine
@@ -73,7 +73,7 @@ uint16_t get_linenumber (void)
  * @brief Initialization of language interpreter.
  *
  * This function initializes pointers used by the interpreter
- * and prints a welcome message along with the memory size.
+ * and prints a welcome message along with the misc_print_memory size.
  *****************************************************************************/
 void basic_init (void)
 {
@@ -210,94 +210,94 @@ static uint8_t execution (void)
                 cmd_status = POST_CMD_NEXT_LINE;
                 break;
             case CMD_NEW:
-                cmd_status = prog_new();
+                cmd_status = misc_clear_program();
                 break;
             case CMD_BEEP:
                 do_beep();
                 cmd_status = POST_CMD_NEXT_LINE;
                 break;
             case CMD_RUN:
-                cmd_status = prog_run();
+                cmd_status = flow_run();
                 break;
             case CMD_IF:
-                cmd_status = check();
+                cmd_status = misc_conditional();
                 break;
             case CMD_GOTO:
-                cmd_status = gotoline();
+                cmd_status = flow_goto();
                 break;
             case CMD_MPLAY:
-                cmd_status = play();
+                cmd_status = snd_play();
                 break;
             case CMD_MSTOP:
-                cmd_status = stop();
+                cmd_status = snd_stop();
                 break;
             case CMD_TEMPO:
-                cmd_status = tempo();
+                cmd_status = snd_tempo();
                 break;
             case CMD_MUSIC:
-                cmd_status = music();
+                cmd_status = snd_music();
                 break;
             case CMD_END:
             case CMD_STOP:
-                cmd_status = prog_end();
+                cmd_status = flow_end();
                 break;
             case CMD_LIST:
-                cmd_status = list();
+                cmd_status = misc_list();
                 break;
             case CMD_MEM:
-                cmd_status = mem();
+                cmd_status = misc_print_mem();
                 break;
             case CMD_PEN:
-                cmd_status = pen();
+                cmd_status = vid_set_pen_colour();
                 break;
             case CMD_PAPER:
-                cmd_status = paper();
+                cmd_status = vid_set_paper_colour();
                 break;
             case CMD_NEXT:
-                cmd_status = next();
+                cmd_status = flow_next();
                 if (error_code)
                     break;
-                cmd_status = gosub_return(CMD_NEXT);
+                cmd_status = flow_return(CMD_NEXT);
                 break;
             case CMD_LET:
-                cmd_status = assignment();
+                cmd_status = misc_assignment();
                 break;
             case CMD_GOSUB:
-                cmd_status = gosub();
+                cmd_status = flow_gosub();
                 break;
             case CMD_RETURN:
-                cmd_status = gosub_return(CMD_RETURN);
+                cmd_status = flow_return(CMD_RETURN);
                 break;
             case CMD_RANDOMIZE:
-                cmd_status = randomize();
+                cmd_status = prng_seed_refresh();
                 break;
             case CMD_RNDSEED:
-                cmd_status = rndseed();
+                cmd_status = prng_seed_define();
                 break;
             case CMD_FOR:
-                cmd_status = loopfor();
+                cmd_status = flow_forloop();
                 break;
             case CMD_INPUT:
-                cmd_status = input();
+                cmd_status = misc_get_value();
                 break;
             case CMD_POKE:
-                cmd_status = poke();
+                cmd_status = misc_poke_mem();
                 break;
             case CMD_PSET:
-                cmd_status = pset();
+                cmd_status = vid_put_pixel();
                 break;
             case CMD_RST:
-                cmd_status = reset_display();
+                cmd_status = vid_reset();
                 break;
             case CMD_PRINT:
             case CMD_QMARK:
-                cmd_status = print();
+                cmd_status = misc_print();
                 break;
             case CMD_LOCATE:
-                cmd_status = locate();
+                cmd_status = vid_locate_cursor();
                 break;
             case CMD_CLS:
-                cmd_status = clear_screen();
+                cmd_status = vid_clear();
                 break;
             case CMD_REM:
             case CMD_HASH:
@@ -305,13 +305,13 @@ static uint8_t execution (void)
                 cmd_status = POST_CMD_NEXT_LINE;
                 break;
             case CMD_PINDIR:
-                cmd_status = pindir();
+                cmd_status = gpio_set_direction();
                 break;
             case CMD_PINDWRITE:
-                cmd_status = pindwrite();
+                cmd_status = gpio_write_digital();
                 break;
             case CMD_ASSIGNMENT:
-                cmd_status = assignment();
+                cmd_status = misc_assignment();
                 break;
             default:
                 error_code = 0xf;
@@ -362,7 +362,7 @@ static uint8_t execution (void)
 /** ***************************************************************************
  * @brief Perform a warm-reset.
  *
- * This function resets program-memory pointer
+ * This function resets program-misc_print_memory pointer
  * and enables cursor and scrolling.
  *****************************************************************************/
 static void warm_reset (void)
@@ -371,7 +371,7 @@ static void warm_reset (void)
 //    g_print("%c", vid_cursor_on);
     // turn-on scroll
 //    g_print("%c", vid_scroll_on);
-    // reset program-memory pointer
+    // reset program-misc_print_memory pointer
     line_ptr = 0;
     stack_ptr = program_space + MEMORY_SIZE;
     printmsg (msg_ok, active_stream);
@@ -392,7 +392,7 @@ static void insert_line (void)
         uint16_t tomove, room_to_make;
 
         while (linelen > 0) {
-                // determine memory space to reserve
+                // determine misc_print_memory space to reserve
                 room_to_make = text_ptr - prog_end_ptr;
                 if (room_to_make > linelen)
                         room_to_make = linelen;
@@ -449,9 +449,9 @@ static void remove_line (void)
 }
 
 /** ***************************************************************************
- * @brief Move line at the end of program memory.
+ * @brief Move line at the end of program misc_print_memory.
  *
- * This function moves the newly entered line to the end of program memory.
+ * This function moves the newly entered line to the end of program misc_print_memory.
  * It is executed whenever the user enters a new line and prior to the
  * interpretation / execution.
  *****************************************************************************/
@@ -462,7 +462,7 @@ static void move_line (void)
         while (*text_ptr != LF)
         text_ptr++;
 
-        /* move line to the end of program_memory */
+        /* move line to the end of program_misc_print_memory */
         uint8_t *dest;
         dest = (uint8_t *)variables_ptr - 1;
         while (1) {
@@ -478,7 +478,7 @@ static void move_line (void)
 /** ***************************************************************************
  * @brief Prepare line for merging with the program.
  *
- * This function calculates the memory space needed for the storing of line,
+ * This function calculates the misc_print_memory space needed for the storing of line,
  * accounting fot the line number as well.
  *****************************************************************************/
 static void prep_line (void)
@@ -509,7 +509,7 @@ static void prep_line (void)
  *****************************************************************************/
 static void error_message (void)
 {
-        text_color (TXT_COL_ERROR);
+        text_color (TEXT_COL_ERROR);
         paper_color (0);
         switch (error_code) {
         case 0x1:       // not yet implemented
@@ -589,6 +589,6 @@ static void error_message (void)
             printmsg (err_msg15, active_stream);
             break;
         }
-        text_color (TXT_COL_DEFAULT);
-        paper_color (0);
+        text_color (TEXT_COL_DEFAULT);
+        paper_color (BACK_COL_DEFAULT);
 }
