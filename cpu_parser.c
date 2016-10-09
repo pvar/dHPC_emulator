@@ -32,7 +32,7 @@
  * strings used for describing sequences of notes and in essence, complete melodies.
  */
 
-#include "parser.h"
+#include "cpu_parser.h"
 
 /// @cond BASIC_KEYWORDS
 

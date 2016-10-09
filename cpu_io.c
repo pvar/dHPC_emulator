@@ -18,7 +18,7 @@
  */
 
 /**
- * @file io.c
+ * @file cpu_io.c
  * @brief Exchange data with sub-systems and peripherals.
  *
  * The functions in this file handle all IO transactions with EEPROM and serial port,
@@ -29,7 +29,7 @@
  *
 */
 
-#include "io.h"
+#include "cpu_io.h"
 
 /** ***************************************************************************
  * @brief Get a new line...

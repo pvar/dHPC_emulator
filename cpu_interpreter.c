@@ -34,7 +34,7 @@
  * who do the dirty work. :)
 */
 
-#include "interpreter.h"
+#include "cpu_interpreter.h"
 
 static uint8_t execution (void);
 static void warm_reset (void);

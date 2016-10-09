@@ -11,7 +11,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-#include "cpu_gpu.h"
+#include "thread_cpu_gpu.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

@@ -1,5 +1,5 @@
 /**
- * @file parser.h
+ * @file cpu_parser.h
  * @brief Prototypes, macros, enumerators and global variables...
  *
  * The @c COMMANDS enumerator contains a member for each command supported by the language.
@@ -9,8 +9,8 @@
  * corresponds to no entry in the \c commands table!
  */
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef CPU_PARSER_H
+#define CPU_PARSER_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
@@ -19,8 +19,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cpu_gpu.h"
-#include "interpreter.h"
+#include "thread_cpu_gpu.h"
+#include "cpu_interpreter.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

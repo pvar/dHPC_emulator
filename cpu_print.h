@@ -1,19 +1,19 @@
 /**
- * @file printing.h
+ * @file cpu_print.h
  * @brief Prototypes, macros, enumerators and global variables...
  * The three macros defined in this file determine the text colour for 'normal' and 'error'
  * messages, as well as the length of a text line on the screen. When porting nstBASIC to
  * other platforms, they should probably have to be be updated.
 */
 
-#ifndef PRINTING_H
-#define PRINTING_H
+#ifndef CPU_PRINT_H
+#define CPU_PRINT_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
 // ------------------------------------------------------------------------------
 
-#include "cpu_gpu.h"
+#include "thread_cpu_gpu.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

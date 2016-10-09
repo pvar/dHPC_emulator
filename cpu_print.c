@@ -28,7 +28,7 @@
  * the corresponding device.
 */
 
-#include "printing.h"
+#include "cpu_print.h"
 
 /// @cond CONST_MESSAGES
 

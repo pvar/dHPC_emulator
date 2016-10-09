@@ -22,8 +22,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "interpreter.h"
-#include "parser.h"
+#include "cpu_interpreter.h"
+#include "cpu_parser.h"
 
 /* FLOW CONTROL */
 uint8_t flow_goto (void);

@@ -1,5 +1,5 @@
 /**
- * @file interpreter.h
+ * @file cpu_interpreter.h
  * @brief Prototypes, macros, enumerators and global variables...
  *
  * Most of the macros in this file play a decisive role in what this system can achieve.
@@ -7,8 +7,8 @@
  * determines the maximum number of nested function calls.
  */
 
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef CPU_INTERPRETER_H
+#define CPU_INTERPRETER_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cpu_gpu.h"
+#include "thread_cpu_gpu.h"
 #include "cmd_various.h"
 #include "cmd_video.h"
 #include "cmd_audio.h"

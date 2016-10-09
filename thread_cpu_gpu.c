@@ -22,7 +22,7 @@
  * @brief Functions that would fit in no other file :)
  */
 
-#include "cpu_gpu.h"
+#include "thread_cpu_gpu.h"
 
 /** ***************************************************************************
  * @brief

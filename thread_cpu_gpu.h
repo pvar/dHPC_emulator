@@ -1,10 +1,10 @@
 /**
- * @file main.h
+ * @file thread_cpu_gpu.h
  * @brief Prototypes, macros, enumerators and global variables...
  */
 
-#ifndef CPU_GPU_H
-#define CPU_GPU_H
+#ifndef THREAD_CPU_GPU_H
+#define THREAD_CPU_GPU_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
@@ -20,9 +20,9 @@
 #include <math.h>
 #include <termios.h>
 
-#include "io.h"
-#include "interpreter.h"
-#include "printing.h"
+#include "cpu_io.h"
+#include "cpu_interpreter.h"
+#include "cpu_print.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

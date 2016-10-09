@@ -22,8 +22,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "interpreter.h"
-#include "parser.h"
+#include "cpu_interpreter.h"
+#include "cpu_parser.h"
 
 uint8_t snd_play (void);
 uint8_t snd_stop (void);

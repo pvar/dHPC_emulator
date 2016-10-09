@@ -1,10 +1,10 @@
 /**
- * @file io.h
+ * @file cpu_io.h
  * @brief Prototypes, macros, enumerators and global variables...
  */
 
-#ifndef IO_H
-#define IO_H
+#ifndef CPU_IO_H
+#define CPU_IO_H
 
 // ------------------------------------------------------------------------------
 // INCLUDES
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-#include "cpu_gpu.h"
+#include "thread_cpu_gpu.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

@@ -22,8 +22,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "interpreter.h"
-#include "parser.h"
+#include "cpu_interpreter.h"
+#include "cpu_parser.h"
 
 uint8_t vid_reset (void);
 uint8_t vid_clear (void);
