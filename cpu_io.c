@@ -137,22 +137,41 @@ void get_line (void)
  *****************************************************************************/
 void init_io (void)
 {
+        guint i;
+
+        /* init keyboard buffer */
         G_LOCK (keyboard_data);
         keyboard_data.wp = 0;
         keyboard_data.cnt = 0;
         G_UNLOCK (keyboard_data);
 
+        /* init struct for communication with GPU */
+        G_LOCK (gpu_data);
+        gpu_data.type = GPU_PRINT;
+        for (i = 0; i < 8; i++)
+                gpu_data.data[i] = 0;
+        gpu_data.received = 1;
+        G_UNLOCK (gpu_data);
+
+        /* init struct for communication with APU */
+        G_LOCK (apu_data);
+        apu_data.type = APU_STOP;
+        for (i = 0; i < 4; i++)
+                apu_data.data[i] = 0;
+        apu_data.received = 1;
+        G_UNLOCK (apu_data);
+
         active_stream = STREAM_STD;
 }
 
 /** ***************************************************************************
- * @brief Put character top selected stream.
+ * @brief Put character to selected stream.
  *****************************************************************************/
 guint emu_putchar (guchar out_char, guchar stream)
 {
         switch (stream) {
                 case STREAM_STD:
-                        vid_put_character((guchar)out_char);
+                        put_gpu (out_char);
                         break;
                 case STREAM_APU:
                         g_print("%c", out_char);
@@ -173,7 +192,7 @@ guint emu_getchar (guchar stream)
 {
         switch (stream) {
                 case STREAM_STD:
-                        return get_std();
+                        return get_kbd();
                 case STREAM_APU:
                         break;
                 case STREAM_SER:
@@ -185,10 +204,10 @@ guint emu_getchar (guchar stream)
 }
 
 /** ***************************************************************************
- * @brief Get character from keyboard buffer
+ * @brief Read character from keyboard buffer
  *****************************************************************************/
 
-guint get_std (void) {
+guchar get_kbd (void) {
         static gint rp;
         gint input_char = -1;
         guint tmp;
@@ -217,6 +236,37 @@ guint get_std (void) {
         }
         return input_char;
 }
+
+/** ***************************************************************************
+ * @brief Send character to GPU
+ *****************************************************************************/
+
+void put_gpu (guchar chr)
+{
+        guchar tmp;
+
+        G_LOCK (gpu_data);
+        tmp = gpu_data.received;
+        G_UNLOCK (gpu_data);
+        while (tmp == 0) {
+                g_usleep (2000);
+                G_LOCK (gpu_data);
+                tmp = gpu_data.received;
+                G_UNLOCK (gpu_data);
+        }
+
+        G_LOCK (gpu_data);
+        gpu_data.type = GPU_PRINT;
+        gpu_data.data[0] = chr;
+        gpu_data.received = 0;
+        G_UNLOCK (gpu_data);
+}
+
+
+
+
+
+
 
 /** ***************************************************************************
  * @brief BEEP or flash the screen.

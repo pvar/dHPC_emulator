@@ -35,10 +35,12 @@ void get_line (void);
 guint emu_putchar (guchar out_char, guchar stream);
 guint emu_getchar (guchar stream);
 
-guint get_std (void);
-guint get_gpu (void);
-guint get_apu (void);
-guint get_ser (void);
+guchar get_kbd (void);
+guchar get_ser (void);
+
+void put_gpu (guchar chr);
+void put_apu (guchar chr);
+void put_ser (guchar chr);
 
 // ------------------------------------------------------------------------------
 // MACROS

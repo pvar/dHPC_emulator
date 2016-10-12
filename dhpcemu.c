@@ -33,18 +33,18 @@ gint main (int argc, char *argv[])
         /* start thread for emulation of CPU */
         g_thread_new ("CPU thread", CPU_thread_init, NULL);
 
-        /* start thread for emulation of APU */
-        //g_thread_new ("APU thread", APU_thread_init, NULL);
-
         /* build UI from XML file and prepare buffers */
         if(build_ui() == FALSE)
                 return 1;
 
+        /* display main window */
+        gtk_widget_show(dhpc->window);
+
         /* start thread for emulation of GPU */
         g_thread_new ("GPU thread", GPU_thread_init, NULL);
 
-        /* display main window */
-        gtk_widget_show(dhpc->window);
+        /* start thread for emulation of APU */
+        //g_thread_new ("APU thread", APU_thread_init, NULL);
 
         /* enter the GTK+ mainloop */
         gtk_main();

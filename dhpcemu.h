@@ -47,22 +47,23 @@ typedef struct {
 
 dHPC *dhpc;
 
-
-struct packet_to_gpu {
-        guchar type;
-        guchar data[12];
-} gpu_data;
-
-struct packet_to_apu {
-        guchar type;
-        guchar data[4];
-} apu_data;
-
 struct input_buffer {
        guint buffer [KEYBOARD_BUFFER_SIZE];
        gint wp;
        gint cnt;
 } keyboard_data;
+
+struct packet_to_gpu {
+        guchar type;
+        guchar data[8];
+        gboolean received;
+} gpu_data;
+
+struct packet_to_apu {
+        guchar type;
+        guchar data[4];
+        gboolean received;
+} apu_data;
 
 G_LOCK_DEFINE (keyboard_data);
 G_LOCK_DEFINE (gpu_data);
@@ -77,10 +78,13 @@ enum {
 };
 
 enum {
-        APU_PRINT = 0,
-        APU_PEN,
-        APU_PAPER,
+        APU_STOP = 0,
+        APU_PLAY,
+        APU_TEMPO,
+        APU_INSERT,
         APU_CLEAR,
-        APU_RESET
+        APU_ENABLE,
+        APU_DISABLE
 };
+
 #endif
