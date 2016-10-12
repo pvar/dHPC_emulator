@@ -118,11 +118,27 @@ void get_line (void)
                                         text_ptr[0] = LF; // LF for newline just like in Unix
                                         newline (active_stream);
                                         return;
+                                case GDK_KEY_space:
+                                case GDK_KEY_KP_Space:
+                                        emu_putchar(SPACE, active_stream);
+                                        text_ptr[0] = SPACE;
+                                        text_ptr++;
+                                        if (text_ptr > maxpos)
+                                                maxpos = text_ptr;
+                                        break;
+                                case GDK_KEY_Tab:
+                                case GDK_KEY_KP_Tab:
+                                        emu_putchar(TAB, active_stream);
+                                        text_ptr[0] = TAB;
+                                        text_ptr++;
+                                        if (text_ptr > maxpos)
+                                                maxpos = text_ptr;
+                                        break;
                                 case GDK_KEY_BackSpace:
                                         if (text_ptr <= prog_end_ptr + 2)
                                                 do_beep();
                                         else {
-                                                g_print("%c", BS);
+                                                emu_putchar(BS, active_stream);
                                                 text_ptr--;
                                         }
                                         break;

@@ -218,10 +218,10 @@ guchar misc_print (void)
         if (*text_ptr == ':') {
                 newline (active_stream);
                 text_ptr++;
-        return POST_CMD_NEXT_STATEMENT;
+                return POST_CMD_NEXT_STATEMENT;
         }
         if (*text_ptr == LF)
-        return POST_CMD_NEXT_LINE;
+                return POST_CMD_NEXT_LINE;
         while (1) {
                 ignorespace();
                 status = print_string();

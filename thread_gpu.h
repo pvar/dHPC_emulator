@@ -24,13 +24,6 @@
 #include "gpu_buffer.h"
 
 // ------------------------------------------------------------------------------
-// PROTOTYPES
-// ------------------------------------------------------------------------------
-
-gpointer GPU_thread_init (gpointer data);
-void init_video (void);
-
-// ------------------------------------------------------------------------------
 // CONSTANTS
 // ------------------------------------------------------------------------------
 
@@ -54,5 +47,14 @@ guchar colour_pen, colour_paper;
 
 guchar cpu_command;
 guchar cpu_data[8];
+
+// ------------------------------------------------------------------------------
+// PROTOTYPES
+// ------------------------------------------------------------------------------
+
+gpointer GPU_thread_init (gpointer data);
+void init_video (void);
+
+struct rgb_triad color_converter (guchar colour);
 
 #endif

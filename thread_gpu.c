@@ -65,9 +65,10 @@ gpointer GPU_thread_init (gpointer data)
                 /* process received command */
                 switch (cpu_command) {
                         case GPU_PRINT:
-                                g_print("%c", cpu_data[0]);
+                                print_character(cpu_data[0]);
                                 break;
                         case GPU_CLEAR:
+                                clear_buffer();
                                 break;
                         case GPU_PAPER:
                                 break;
@@ -90,6 +91,20 @@ gpointer GPU_thread_init (gpointer data)
 void init_video() {
         colour_pen = TEXT_COL_DEFAULT;
         colour_paper = BACK_COL_DEFAULT;
-        //buffer_clear();
-        //put_logo();
+        clear_buffer();
+        put_logo();
+}
+
+/** ***************************************************************************
+ * @brief
+ *****************************************************************************/
+
+struct rgb_triad color_converter (guchar colour)
+{
+        struct rgb_triad rgb_colour;
+        guchar multiplier = ((colour >> 6) & 3);
+        rgb_colour.red = (colour & 3) * multiplier;
+        rgb_colour.green = ((colour >> 2) & 3) * multiplier;
+        rgb_colour.blue = ((colour >> 4) & 3) * multiplier;
+        return rgb_colour;
 }

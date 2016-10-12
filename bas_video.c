@@ -29,8 +29,6 @@ guchar vid_reset (void)
 
 guchar vid_clear (void)
 {
-        cursor_x = 0;
-        cursor_y = 0;
         // clear frame buffer
         return POST_CMD_NEXT_STATEMENT;
 }
