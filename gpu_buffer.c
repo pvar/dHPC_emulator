@@ -25,7 +25,6 @@
  *
  * the table contains 95 characters (ASCII #32 to #126)
  * ---------------------------------------------------------------- */
-/*
 const guchar fontdata[950] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     // SPACE
         0x00, 0x10, 0x10, 0x10, 0x10, 0x10, 0x00, 0x10, 0x00, 0x00,     // !
@@ -140,7 +139,6 @@ const guchar logoimg[728] = {
         0, 0, 67, 67, 67, 67, 67, 0, 0, 0, 143, 143, 143, 143, 143, 0, 0, 0, 76, 76, 0, 0, 188, 188, 0, 0, 112, 112, 112, 112, 112, 0, 0, 85, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 85, 85, 85, 85, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
-*/
 
 
 void reset (void)
@@ -167,7 +165,6 @@ void put_pixel (void)
 {
 }
 
-/*
 void vid_put_character (guchar chr)
 {
         if ((chr >= 32) && (chr <= 126)) {
@@ -227,7 +224,7 @@ void draw_printable (guchar chr)
                         font_data = font_data << 1;
                 }
         }
-        // display frame buffer on screen
+        /* display frame buffer on screen */
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 
         cursor_x++;
@@ -236,7 +233,6 @@ void draw_printable (guchar chr)
                 cursor_y++; // check if have to scroll!!
         }
 }
-
 
 struct rgb_triad color_converter (guchar colour)
 {
@@ -247,4 +243,3 @@ struct rgb_triad color_converter (guchar colour)
         rgb_colour.blue = ((colour >> 4) & 3) * multiplier;
         return rgb_colour;
 }
-*/

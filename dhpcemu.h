@@ -57,12 +57,14 @@ struct packet_to_gpu {
         guchar type;
         guchar data[8];
         gboolean received;
+        gboolean new_set;
 } gpu_data;
 
 struct packet_to_apu {
         guchar type;
         guchar data[4];
         gboolean received;
+        gboolean new_set;
 } apu_data;
 
 G_LOCK_DEFINE (keyboard_data);

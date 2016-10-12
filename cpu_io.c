@@ -109,8 +109,11 @@ void get_line (void)
                                 case GDK_KEY_Down:
                                 case GDK_KEY_KP_Down:
                                         break;
+
                                 case GDK_KEY_Return:
                                 case GDK_KEY_KP_Enter:
+                                case GDK_KEY_3270_Enter:
+                                case GDK_KEY_ISO_Enter:
                                         text_ptr = maxpos;
                                         text_ptr[0] = LF; // LF for newline just like in Unix
                                         newline (active_stream);
@@ -150,7 +153,8 @@ void init_io (void)
         gpu_data.type = GPU_PRINT;
         for (i = 0; i < 8; i++)
                 gpu_data.data[i] = 0;
-        gpu_data.received = 1;
+        gpu_data.received = TRUE;
+        gpu_data.new_set = FALSE;
         G_UNLOCK (gpu_data);
 
         /* init struct for communication with APU */
@@ -158,7 +162,8 @@ void init_io (void)
         apu_data.type = APU_STOP;
         for (i = 0; i < 4; i++)
                 apu_data.data[i] = 0;
-        apu_data.received = 1;
+        apu_data.received = TRUE;
+        apu_data.new_set = FALSE;
         G_UNLOCK (apu_data);
 
         active_stream = STREAM_STD;
@@ -207,7 +212,7 @@ guint emu_getchar (guchar stream)
  * @brief Read character from keyboard buffer
  *****************************************************************************/
 
-guchar get_kbd (void) {
+guint get_kbd (void) {
         static gint rp;
         gint input_char = -1;
         guint tmp;
@@ -243,12 +248,12 @@ guchar get_kbd (void) {
 
 void put_gpu (guchar chr)
 {
-        guchar tmp;
+        gboolean tmp;
 
         G_LOCK (gpu_data);
         tmp = gpu_data.received;
         G_UNLOCK (gpu_data);
-        while (tmp == 0) {
+        while (tmp == FALSE) {
                 g_usleep (2000);
                 G_LOCK (gpu_data);
                 tmp = gpu_data.received;
@@ -258,7 +263,8 @@ void put_gpu (guchar chr)
         G_LOCK (gpu_data);
         gpu_data.type = GPU_PRINT;
         gpu_data.data[0] = chr;
-        gpu_data.received = 0;
+        gpu_data.received = FALSE; // it will be set to TRUE when read from gpu-thread
+        gpu_data.new_set = TRUE;   // it will be set to FALSE when read from gpu-thread
         G_UNLOCK (gpu_data);
 }
 

@@ -31,18 +31,6 @@
 #define BACK_COL_DEFAULT 0
 #define TEXT_COL_ERROR 3
 
-guchar cursor_x, cursor_y;
-guchar colour_pen, colour_paper;
-
-struct rgb_triad {
-        guchar red;
-        guchar green;
-        guchar blue;
-};
-
-void vid_put_character (guchar chr);
-void draw_printable (guchar chr);
-
 guchar vid_reset (void);
 guchar vid_clear (void);
 guchar vid_set_pen_colour (void);
@@ -50,9 +38,5 @@ guchar vid_set_paper_colour (void);
 guchar vid_locate_cursor (void);
 guchar vid_put_pixel (void);
 
-struct rgb_triad color_converter (guchar colour);
-
-const guchar logoimg[728];
-const guchar fontdata[950];
 
 #endif

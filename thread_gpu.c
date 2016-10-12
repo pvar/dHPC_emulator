@@ -29,16 +29,67 @@
  *****************************************************************************/
 gpointer GPU_thread_init (gpointer data)
 {
+        guint i;
+
+        /* initialize local data */
+        cpu_command = 0;
+        for (i = 0; i < 8; i++)
+                cpu_data[i] = 0;
+
+        /* initialize colours and frame buffer */
         init_video();
 
+        /* main loop: get and process incoming data */
+        while (1) {
+                gboolean tmp;
+                /* wait for new set of data*/
+                G_LOCK (gpu_data);
+                tmp = gpu_data.new_set;
+                G_UNLOCK (gpu_data);
+                while (tmp == FALSE) {
+                        g_usleep (2000);
+                        G_LOCK (gpu_data);
+                        tmp = gpu_data.new_set;
+                        G_UNLOCK (gpu_data);
+                }
 
+                /* get data to local variables */
+                G_LOCK (gpu_data);
+                cpu_command = gpu_data.type;
+                for (i = 0; i < 8; i++)
+                        cpu_data[i] = gpu_data.data[i];
+                gpu_data.received = TRUE;
+                gpu_data.new_set = FALSE;
+                G_UNLOCK (gpu_data);
+
+                /* process received command */
+                switch (cpu_command) {
+                        case GPU_PRINT:
+                                g_print("%c", cpu_data[0]);
+                                break;
+                        case GPU_CLEAR:
+                                break;
+                        case GPU_PAPER:
+                                break;
+                        case GPU_PEN:
+                                break;
+                        case GPU_RESET:
+                                break;
+                        default:
+                                break;
+                }
+        }
 
         return NULL;
 }
 
+/** ***************************************************************************
+ * @brief
+ *****************************************************************************/
 
 void init_video() {
-        //buffer_clear();
         colour_pen = TEXT_COL_DEFAULT;
         colour_paper = BACK_COL_DEFAULT;
+        //buffer_clear();
+        //put_logo();
 }

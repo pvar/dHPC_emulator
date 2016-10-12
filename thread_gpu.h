@@ -21,6 +21,7 @@
 #include <termios.h>
 
 #include "dhpcemu.h"
+#include "gpu_buffer.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES
@@ -42,13 +43,16 @@ void init_video (void);
 // GLOBALS
 // ------------------------------------------------------------------------------
 
-guchar cursor_x, cursor_y;
-guchar colour_pen, colour_paper;
-/*
 struct rgb_triad {
         guchar red;
         guchar green;
         guchar blue;
 };
-*/
+
+guchar cursor_x, cursor_y;
+guchar colour_pen, colour_paper;
+
+guchar cpu_command;
+guchar cpu_data[8];
+
 #endif

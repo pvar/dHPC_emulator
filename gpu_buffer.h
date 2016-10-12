@@ -23,10 +23,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dhpcemu.h"
+#include "thread_gpu.h"
 
-//void put_character (guchar chr);
-//void draw_printable (guchar chr);
+void put_character (guchar chr);
+void draw_printable (guchar chr);
+struct rgb_triad color_converter (guchar colour);
 
 void reset (void);
 void clear (void);
@@ -35,9 +36,7 @@ void set_paper_colour(void);
 void locate_cursor (void);
 void put_pixel (void);
 
-//struct rgb_triad color_converter (guchar colour);
-
-//const guchar logoimg[728];
-//const guchar fontdata[950];
+const guchar logoimg[728];
+const guchar fontdata[950];
 
 #endif

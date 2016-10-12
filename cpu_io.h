@@ -35,7 +35,7 @@ void get_line (void);
 guint emu_putchar (guchar out_char, guchar stream);
 guint emu_getchar (guchar stream);
 
-guchar get_kbd (void);
+guint get_kbd (void); // Must be guint!!
 guchar get_ser (void);
 
 void put_gpu (guchar chr);
