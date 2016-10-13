@@ -276,15 +276,21 @@ void draw_printable (guchar chr)
 
                 font_data = fontdata[(chr - 32) * 10 + font_line];
                 for (pxl_ptr = 0; pxl_ptr < 8; pxl_ptr++) {
-                        pixel = &dhpc->pixelbuffer[(fb_offset + pxl_ptr) * 3];
+                        pixel = &dhpc->pixelbuffer[(fb_offset + pxl_ptr) * 6];
                         if (font_data & 128) {
                                 *pixel     = colour_pen.red;
                                 *(pixel+1) = colour_pen.green;
                                 *(pixel+2) = colour_pen.blue;
+                                *(pixel+3) = colour_pen.red;
+                                *(pixel+4) = colour_pen.green;
+                                *(pixel+5) = colour_pen.blue;
                         } else {
                                 *pixel     = colour_paper.red;
                                 *(pixel+1) = colour_paper.green;
                                 *(pixel+2) = colour_paper.blue;
+                                *(pixel+3) = colour_paper.red;
+                                *(pixel+4) = colour_paper.green;
+                                *(pixel+5) = colour_paper.blue;
                         }
                         font_data = font_data << 1;
                 }
