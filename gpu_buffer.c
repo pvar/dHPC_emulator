@@ -93,7 +93,7 @@ const guchar fontdata[950] = {
         0x00, 0x10, 0x10, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     // `
         0, 0, 0, 56, 4, 60, 68, 68, 56, 0,                              // a
         0, 0, 64, 64, 120, 68, 68, 68, 56, 0,                           // b
-        0, 0, 0, 60, 66, 64, 64, 64, 60, 0,                             // c
+        0, 0, 0, 60, 64, 64, 64, 64, 60, 0,                             // c
         0, 0, 4, 4, 60, 68, 68, 68, 56, 0,
         0, 0, 0, 56, 68, 68, 120, 64, 56, 0,
         0, 0, 60, 64, 64, 120, 64, 64, 64, 0,
@@ -209,6 +209,34 @@ void put_pixel (void)
 
 void put_logo (void)
 {
+        guchar image_line, image_data;
+        guint image_offset, fb_offset;
+
+        guchar pixel_ptr;
+        guchar *pixel;
+        struct rgb_triad pixel_col;
+
+        for (image_line = 0; image_line < 14; image_line++) {
+
+                fb_offset = (image_line + 100) * FB_WIDTH + 102;
+                image_offset = image_line * 52;
+
+                for (pixel_ptr = 0; pixel_ptr < 52; pixel_ptr++) {
+                        // get colour from table and convert it to RGB values */
+                        image_data = logoimg[image_offset + pixel_ptr];
+                        pixel_col = color_converter(image_data);
+                        // put pixel in frame buffer */
+                        pixel = &dhpc->pixelbuffer[(fb_offset + pixel_ptr) * 6];
+                        *pixel     = pixel_col.red;
+                        *(pixel+1) = pixel_col.green;
+                        *(pixel+2) = pixel_col.blue;
+                        *(pixel+3) = pixel_col.red;
+                        *(pixel+4) = pixel_col.green;
+                        *(pixel+5) = pixel_col.blue;
+                }
+        }
+        /* display updated frame buffer */
+        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 }
 
 /** ***************************************************************************
@@ -267,7 +295,7 @@ void draw_printable (guchar chr)
 {
         guchar font_line, font_data, pxl_ptr;
         guchar *pixel;
-        gint pixel_col, pixel_row, fb_offset;
+        guint pixel_col, pixel_row, fb_offset;
 
         for (font_line = 0; font_line < 10; font_line++) {
                 pixel_col = cursor_x * 8;
