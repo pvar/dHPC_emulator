@@ -167,7 +167,7 @@ void init_io (void)
         /* init struct for communication with GPU */
         G_LOCK (gpu_data);
         gpu_data.type = GPU_PRINT;
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < GPU_DATA_PACKET; i++)
                 gpu_data.data[i] = 0;
         gpu_data.received = TRUE;
         gpu_data.new_set = FALSE;
@@ -176,7 +176,7 @@ void init_io (void)
         /* init struct for communication with APU */
         G_LOCK (apu_data);
         apu_data.type = APU_STOP;
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < APU_DATA_PACKET; i++)
                 apu_data.data[i] = 0;
         apu_data.received = TRUE;
         apu_data.new_set = FALSE;
@@ -192,7 +192,7 @@ guint emu_putchar (guchar out_char, guchar stream)
 {
         switch (stream) {
                 case STREAM_STD:
-                        put_gpu (out_char);
+                        putchr_gpu (out_char);
                         break;
                 case STREAM_APU:
                         g_print("%c", out_char);
@@ -213,7 +213,7 @@ guint emu_getchar (guchar stream)
 {
         switch (stream) {
                 case STREAM_STD:
-                        return get_kbd();
+                        return getchr_kbd();
                 case STREAM_APU:
                         break;
                 case STREAM_SER:
@@ -228,7 +228,7 @@ guint emu_getchar (guchar stream)
  * @brief Read character from keyboard buffer
  *****************************************************************************/
 
-guint get_kbd (void) {
+guint getchr_kbd (void) {
         static gint rp;
         gint input_char = -1;
         guint tmp;
@@ -262,10 +262,11 @@ guint get_kbd (void) {
  * @brief Send character to GPU
  *****************************************************************************/
 
-void put_gpu (guchar chr)
+void putchr_gpu (guchar chr)
 {
         gboolean tmp;
 
+        /* wait for other threads to stop using gpu_data */
         G_LOCK (gpu_data);
         tmp = gpu_data.received;
         G_UNLOCK (gpu_data);
@@ -276,6 +277,7 @@ void put_gpu (guchar chr)
                 G_UNLOCK (gpu_data);
         }
 
+        /* load values to gup_data struct */
         G_LOCK (gpu_data);
         gpu_data.type = GPU_PRINT;
         gpu_data.data[0] = chr;
@@ -284,6 +286,39 @@ void put_gpu (guchar chr)
         G_UNLOCK (gpu_data);
 }
 
+/** ***************************************************************************
+ * @brief Send command to GPU
+ *****************************************************************************/
+
+void putcmd_gpu (guchar command, gint length, guchar *data)
+{
+        gboolean tmp;
+        guint i;
+
+        /* sanitize length */
+        if (length > GPU_DATA_PACKET)
+                length = GPU_DATA_PACKET;
+
+        /* wait for other threads to stop using gpu_data */
+        G_LOCK (gpu_data);
+        tmp = gpu_data.received;
+        G_UNLOCK (gpu_data);
+        while (tmp == FALSE) {
+                g_usleep (2000);
+                G_LOCK (gpu_data);
+                tmp = gpu_data.received;
+                G_UNLOCK (gpu_data);
+        }
+
+        /* load values to gup_data struct */
+        G_LOCK (gpu_data);
+        gpu_data.type = command;
+        for (i = 0; i < length; i++)
+                gpu_data.data[i] = *(data + i);
+        gpu_data.received = FALSE; // it will be set to TRUE when read from gpu-thread
+        gpu_data.new_set = TRUE;   // it will be set to FALSE when read from gpu-thread
+        G_UNLOCK (gpu_data);
+}
 
 
 

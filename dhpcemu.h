@@ -30,6 +30,8 @@ gint build_ui ( void );
 #define FB_WIDTH 512
 #define FB_HEIGHT 480
 #define KEYBOARD_BUFFER_SIZE 32
+#define GPU_DATA_PACKET 8
+#define APU_DATA_PACKET 4
 
 // ------------------------------------------------------------------------------
 // GLOBALS
@@ -55,14 +57,14 @@ struct input_buffer {
 
 struct packet_to_gpu {
         guchar type;
-        guchar data[8];
+        guchar data[GPU_DATA_PACKET];
         gboolean received;
         gboolean new_set;
 } gpu_data;
 
 struct packet_to_apu {
         guchar type;
-        guchar data[4];
+        guchar data[APU_DATA_PACKET];
         gboolean received;
         gboolean new_set;
 } apu_data;

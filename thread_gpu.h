@@ -48,7 +48,7 @@ struct rgb_triad colour_pen;
 struct rgb_triad colour_paper;
 
 guchar cpu_command;
-guchar cpu_data[8];
+guchar cpu_data[GPU_DATA_PACKET];
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

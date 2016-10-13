@@ -33,7 +33,7 @@ gpointer GPU_thread_init (gpointer data)
 
         /* initialize local data */
         cpu_command = 0;
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < GPU_DATA_PACKET; i++)
                 cpu_data[i] = 0;
 
         /* initialize colours and frame buffer */
@@ -56,7 +56,7 @@ gpointer GPU_thread_init (gpointer data)
                 /* get data to local variables */
                 G_LOCK (gpu_data);
                 cpu_command = gpu_data.type;
-                for (i = 0; i < 8; i++)
+                for (i = 0; i < GPU_DATA_PACKET; i++)
                         cpu_data[i] = gpu_data.data[i];
                 gpu_data.received = TRUE;
                 gpu_data.new_set = FALSE;
@@ -73,8 +73,10 @@ gpointer GPU_thread_init (gpointer data)
                         case GPU_PAPER:
                                 break;
                         case GPU_PEN:
+                                g_print ("\npen: %i\n", cpu_data[0]);
                                 break;
                         case GPU_RESET:
+                                init_video();
                                 break;
                         default:
                                 break;
@@ -111,9 +113,10 @@ struct rgb_triad color_converter (guchar colour)
                 multiplier = 1;
 
         correction = (colour & 192) >> 5;
+
         rgb_colour.red =   ((colour & 3)  << 5) * multiplier + correction;
         rgb_colour.green = ((colour & 12) << 3) * multiplier + correction;
         rgb_colour.blue =  ((colour & 48) << 1) * multiplier + correction;
-        g_print("(mul: %i) red: %i, green: %i, blue: %i\n", multiplier, rgb_colour.red, rgb_colour.green, rgb_colour.blue);
+        //g_print("(mul: %i) red: %i, green: %i, blue: %i\n", multiplier, rgb_colour.red, rgb_colour.green, rgb_colour.blue);
         return rgb_colour;
 }

@@ -21,49 +21,34 @@
 
 guchar vid_reset (void)
 {
-        vid_clear();
+        putcmd_gpu (GPU_RESET, 0, NULL);
+        misc_clear_program();
         printmsg (msg_welcome, active_stream);
-        prog_end_ptr = program_space;
         return POST_CMD_PROMPT;
 }
 
 guchar vid_clear (void)
 {
-        gboolean tmp;
-
-        G_LOCK (gpu_data);
-        tmp = gpu_data.received;
-        G_UNLOCK (gpu_data);
-        while (tmp == FALSE) {
-                g_usleep (1000);
-                G_LOCK (gpu_data);
-                tmp = gpu_data.received;
-                G_UNLOCK (gpu_data);
-        }
-
-        G_LOCK (gpu_data);
-        gpu_data.type = GPU_CLEAR;
-        gpu_data.received = FALSE; // it will be set to TRUE when read from gpu-thread
-        gpu_data.new_set = TRUE;   // it will be set to FALSE when read from gpu-thread
-        G_UNLOCK (gpu_data);
-
+        putcmd_gpu (GPU_CLEAR, 0, NULL);
         return POST_CMD_NEXT_STATEMENT;
 }
 
 guchar vid_set_pen_colour (void)
 {
-        uint16_t col;
+        uint16_t colour_value;
+        guchar colour;
         // get color value
-        col = parse_expr_s1();
+        colour_value = parse_expr_s1();
         if (error_code)
                 return POST_CMD_WARM_RESET;
-        if (col < 0 || col > 127) {
+        if (colour_value < 0 || colour_value > 127) {
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        //text_color ((uint8_t)col);
-        //colour_pen = (uint8_t)col;
-        return POST_CMD_NEXT_STATEMENT;}
+        colour = (guchar)colour_value;
+        putcmd_gpu (GPU_PEN, 1, &colour);
+        return POST_CMD_NEXT_STATEMENT;
+}
 
 guchar vid_set_paper_colour(void)
 {
