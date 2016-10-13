@@ -48,14 +48,23 @@ guchar * valid_filename (void);
 // CONSTANTS
 // ------------------------------------------------------------------------------
 
-#define cfg_auto_run       1 // 1st bit
-#define cfg_run_after_load 2 // 2nd bit
-#define cfg_from_sdcard    4 // 3rd bit
-#define cfg_from_eeprom    8 // 4th bit
+#define KEYBOARD_BUFFER_SIZE    32
+#define cfg_auto_run            1  // 1st bit
+#define cfg_run_after_load      2  // 2nd bit
+#define cfg_from_sdcard         4  // 3rd bit
+#define cfg_from_eeprom         8  // 4th bit
 
 // ------------------------------------------------------------------------------
 // GLOBALS
 // ------------------------------------------------------------------------------
+
+struct input_buffer {
+       guint buffer [KEYBOARD_BUFFER_SIZE];
+       gint wp;
+       gint cnt;
+} keyboard_data;
+
+G_LOCK_DEFINE (keyboard_data);
 
 guchar sys_config;
 

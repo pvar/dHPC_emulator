@@ -68,7 +68,7 @@ void get_line (void)
                                                 ////g_print("%c", vid_tosol);
                                                 // calculate lines to move the cursor up
                                                 temp1 = text_ptr - prog_end_ptr - 2;
-                                                ////g_print("%c", temp1 / CHAR_PER_LINE + 1);
+                                                ////g_print("%c", temp1 / CHARS_PER_LINE + 1);
                                                 text_ptr = prog_end_ptr + 2;
                                         }
                                         break;
@@ -80,10 +80,10 @@ void get_line (void)
                                                 // chars from start of line
                                                 temp2 = text_ptr - prog_end_ptr - 2;
                                                 // calculate line-ending row
-                                                temp2 = temp1 / CHAR_PER_LINE - temp2 / CHAR_PER_LINE;
+                                                temp2 = temp1 / CHARS_PER_LINE - temp2 / CHARS_PER_LINE;
                                                 g_print("%c", temp2 + 1);
                                                 // calculate line-ending column
-                                                temp2 = temp1 - (temp1 / CHAR_PER_LINE) * CHAR_PER_LINE;
+                                                temp2 = temp1 - (temp1 / CHARS_PER_LINE) * CHARS_PER_LINE;
                                                 g_print("%c", temp2);
                                                 text_ptr = maxpos;
                                         }
@@ -167,7 +167,7 @@ void init_io (void)
         /* init struct for communication with GPU */
         G_LOCK (gpu_data);
         gpu_data.type = GPU_PRINT;
-        for (i = 0; i < GPU_DATA_PACKET; i++)
+        for (i = 0; i < GPU_DATA_LENGTH; i++)
                 gpu_data.data[i] = 0;
         gpu_data.received = TRUE;
         gpu_data.new_set = FALSE;
@@ -296,8 +296,8 @@ void putcmd_gpu (guchar command, gint length, guchar *data)
         guint i;
 
         /* sanitize length */
-        if (length > GPU_DATA_PACKET)
-                length = GPU_DATA_PACKET;
+        if (length > GPU_DATA_LENGTH)
+                length = GPU_DATA_LENGTH;
 
         /* wait for other threads to stop using gpu_data */
         G_LOCK (gpu_data);

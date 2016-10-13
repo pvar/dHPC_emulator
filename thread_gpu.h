@@ -27,10 +27,13 @@
 // CONSTANTS
 // ------------------------------------------------------------------------------
 
-#define CHAR_PER_LINE 32
-#define TEXT_COL_DEFAULT 12
-#define BACK_COL_DEFAULT 0
-#define TEXT_COL_ERROR 3
+#define GPU_DATA_LENGTH    8
+#define CHARS_PER_LINE     32
+#define LINES_PER_FRAME    24
+#define TEXT_COL_DEFAULT   76
+#define TEXT_COL_ERROR     67
+#define BACK_COL_DEFAULT   0
+#define PXL_LINES_PER_CHAR 10
 
 // ------------------------------------------------------------------------------
 // GLOBALS
@@ -42,13 +45,22 @@ struct rgb_triad {
         guchar blue;
 };
 
+struct packet_to_gpu {
+        guchar type;
+        guchar data[GPU_DATA_LENGTH];
+        gboolean received;
+        gboolean new_set;
+} gpu_data;
+
+G_LOCK_DEFINE (gpu_data);
+
 guchar cursor_x, cursor_y;
 
 struct rgb_triad colour_pen;
 struct rgb_triad colour_paper;
 
 guchar cpu_command;
-guchar cpu_data[GPU_DATA_PACKET];
+guchar cpu_data[GPU_DATA_LENGTH];
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES

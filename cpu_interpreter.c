@@ -503,8 +503,13 @@ static void prep_line (void)
  *****************************************************************************/
 static void error_message (void)
 {
-        //text_color (TEXT_COL_ERROR);
-        //paper_color (BACK_COL_DEFAULT);
+        guchar colour;
+
+        colour = TEXT_COL_ERROR;
+        putcmd_gpu (GPU_PEN, 1, &colour);
+
+        colour = BACK_COL_DEFAULT;
+        putcmd_gpu (GPU_PAPER, 1, &colour);
 
         switch (error_code) {
         case 0x1:       // not yet implemented
@@ -585,6 +590,9 @@ static void error_message (void)
             break;
         }
 
-        //text_color (TEXT_COL_DEFAULT);
-        //paper_color (BACK_COL_DEFAULT);
+        colour = TEXT_COL_DEFAULT;
+        putcmd_gpu (GPU_PEN, 1, &colour);
+
+        colour = BACK_COL_DEFAULT;
+        putcmd_gpu (GPU_PAPER, 1, &colour);
 }

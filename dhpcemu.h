@@ -13,6 +13,7 @@
 
 #include "thread_cpu.h"
 #include "thread_gpu.h"
+//#include "thread_apu.h"
 
 // ------------------------------------------------------------------------------
 // PROTOTYPES
@@ -29,8 +30,7 @@ gint build_ui ( void );
 
 #define FB_WIDTH 512
 #define FB_HEIGHT 480
-#define KEYBOARD_BUFFER_SIZE 32
-#define GPU_DATA_PACKET 8
+#define GPU_DATA_LENGTH 8
 #define APU_DATA_PACKET 4
 
 // ------------------------------------------------------------------------------
@@ -49,19 +49,6 @@ typedef struct {
 
 dHPC *dhpc;
 
-struct input_buffer {
-       guint buffer [KEYBOARD_BUFFER_SIZE];
-       gint wp;
-       gint cnt;
-} keyboard_data;
-
-struct packet_to_gpu {
-        guchar type;
-        guchar data[GPU_DATA_PACKET];
-        gboolean received;
-        gboolean new_set;
-} gpu_data;
-
 struct packet_to_apu {
         guchar type;
         guchar data[APU_DATA_PACKET];
@@ -69,12 +56,11 @@ struct packet_to_apu {
         gboolean new_set;
 } apu_data;
 
-G_LOCK_DEFINE (keyboard_data);
-G_LOCK_DEFINE (gpu_data);
 G_LOCK_DEFINE (apu_data);
 
 enum {
         GPU_PRINT = 0,
+        GPU_LOCATE,
         GPU_PEN,
         GPU_PAPER,
         GPU_CLEAR,

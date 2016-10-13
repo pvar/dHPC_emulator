@@ -33,7 +33,7 @@ gpointer GPU_thread_init (gpointer data)
 
         /* initialize local data */
         cpu_command = 0;
-        for (i = 0; i < GPU_DATA_PACKET; i++)
+        for (i = 0; i < GPU_DATA_LENGTH; i++)
                 cpu_data[i] = 0;
 
         /* initialize colours and frame buffer */
@@ -56,7 +56,7 @@ gpointer GPU_thread_init (gpointer data)
                 /* get data to local variables */
                 G_LOCK (gpu_data);
                 cpu_command = gpu_data.type;
-                for (i = 0; i < GPU_DATA_PACKET; i++)
+                for (i = 0; i < GPU_DATA_LENGTH; i++)
                         cpu_data[i] = gpu_data.data[i];
                 gpu_data.received = TRUE;
                 gpu_data.new_set = FALSE;
@@ -71,9 +71,24 @@ gpointer GPU_thread_init (gpointer data)
                                 clear_buffer();
                                 break;
                         case GPU_PAPER:
+                                colour_paper = color_converter(cpu_data[0]);
                                 break;
                         case GPU_PEN:
-                                g_print ("\npen: %i\n", cpu_data[0]);
+                                colour_pen = color_converter(cpu_data[0]);
+                                break;
+                        case GPU_LOCATE:
+                                if (cpu_data[0] < 0)
+                                        cursor_y = 0;
+                                else if (cpu_data[0] > LINES_PER_FRAME)
+                                        cursor_y = LINES_PER_FRAME - 1;
+                                else
+                                        cursor_y = cpu_data[0];
+                                if (cpu_data[1] < 0)
+                                        cursor_x = 0;
+                                else if (cpu_data[0] > CHARS_PER_LINE)
+                                        cursor_x = CHARS_PER_LINE - 1;
+                                else
+                                        cursor_x = cpu_data[0];
                                 break;
                         case GPU_RESET:
                                 init_video();

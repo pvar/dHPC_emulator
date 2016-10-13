@@ -37,6 +37,7 @@ guchar vid_set_pen_colour (void)
 {
         uint16_t colour_value;
         guchar colour;
+
         // get color value
         colour_value = parse_expr_s1();
         if (error_code)
@@ -52,23 +53,27 @@ guchar vid_set_pen_colour (void)
 
 guchar vid_set_paper_colour(void)
 {
-        uint16_t col;
+        uint16_t colour_value;
+        guchar colour;
+
         // get color value
-        col = parse_expr_s1();
+        colour_value = parse_expr_s1();
         if (error_code)
                 return POST_CMD_WARM_RESET;
-        if (col < 0 || col > 127) {
+        if (colour_value < 0 || colour_value > 127) {
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        //paper_color ((uint8_t)col);
-        //colour_paper = (uint8_t)col;
+        colour = (guchar)colour_value;
+        putcmd_gpu (GPU_PAPER, 1, &colour);
         return POST_CMD_NEXT_STATEMENT;
 }
 
 guchar vid_locate_cursor (void)
 {
         uint16_t line, column;
+        guchar data[2];
+
         // get target line
         line = parse_expr_s1();
         if (error_code)
@@ -91,9 +96,9 @@ guchar vid_locate_cursor (void)
                 error_code = 0x10;
                 return POST_CMD_WARM_RESET;
         }
-        // vid_locate_cursor (line, column);
-        cursor_x = column;
-        cursor_y = line;
+        data[0] = (guchar)line;
+        data[1] = (guchar)column;
+        putcmd_gpu (GPU_LOCATE, 2, data);
         return POST_CMD_NEXT_STATEMENT;
 }
 

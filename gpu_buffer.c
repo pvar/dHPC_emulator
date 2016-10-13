@@ -144,14 +144,6 @@ const guchar logoimg[728] = {
  * @brief
  *****************************************************************************/
 
-void reset_buffer (void)
-{
-}
-
-/** ***************************************************************************
- * @brief
- *****************************************************************************/
-
 void clear_buffer (void)
 {
         gint pxl_ptr;
@@ -171,29 +163,6 @@ void clear_buffer (void)
         cursor_y = 0;
 }
 
-/** ***************************************************************************
- * @brief
- *****************************************************************************/
-
-void set_pen_colour (void)
-{
-}
-
-/** ***************************************************************************
- * @brief
- *****************************************************************************/
-
-void set_paper_colour(void)
-{
-}
-
-/** ***************************************************************************
- * @brief
- *****************************************************************************/
-
-void locate_cursor (void)
-{
-}
 
 /** ***************************************************************************
  * @brief
@@ -245,6 +214,7 @@ void put_logo (void)
 
 void scroll_buffer (void)
 {
+//PXL_LINES_PER_CHAR
 }
 
 /** ***************************************************************************
@@ -297,7 +267,7 @@ void draw_printable (guchar chr)
         guchar *pixel;
         guint pixel_col, pixel_row, fb_offset;
 
-        for (font_line = 0; font_line < 10; font_line++) {
+        for (font_line = 0; font_line < PXL_LINES_PER_CHAR; font_line++) {
                 pixel_col = cursor_x * 8;
                 pixel_row = cursor_y * 10 + font_line;
                 fb_offset = pixel_row * FB_WIDTH + pixel_col;
@@ -327,7 +297,7 @@ void draw_printable (guchar chr)
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 
         cursor_x++;
-        if (cursor_x == CHAR_PER_LINE) {
+        if (cursor_x == CHARS_PER_LINE) {
                 cursor_x = 0;
                 cursor_y++; // check if have to scroll!!
         }
