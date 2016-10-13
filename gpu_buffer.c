@@ -214,7 +214,32 @@ void put_logo (void)
 
 void scroll_buffer (void)
 {
-//PXL_LINES_PER_CHAR
+        gint pxl_ptr, pxl_line;
+        guchar *pixel1;
+        guchar *pixel2;
+
+g_print("scoll init\n");
+        /* transfer buffer data one character-line up */
+        for (pxl_line = 0; pxl_line < 2 * PXL_LINES_PER_CHAR; pxl_line++) {
+                for (pxl_ptr = 0; pxl_ptr < FB_WIDTH; pxl_ptr++) {
+                        pixel1 = &dhpc->pixelbuffer[pxl_ptr * 3];
+                        pixel2 = &dhpc->pixelbuffer[pxl_ptr * 3 + pxl_line + FB_WIDTH];
+                        *pixel1     = *pixel2;
+                        *(pixel1+1) = *(pixel2+1);
+                        *(pixel1+2) = *(pixel2+1);
+                }
+        }
+g_print("scoll moved\n");
+        /* fill last character-line of buffer with paper colour */
+        for (pxl_ptr = (FB_HEIGHT - 20) * FB_WIDTH; pxl_ptr < FB_HEIGHT * FB_WIDTH; pxl_ptr++) {
+                pixel1 = &dhpc->pixelbuffer[pxl_ptr * 3];
+                *pixel1     = colour_paper.red;
+                *(pixel1+1) = colour_paper.green;
+                *(pixel1+2) = colour_paper.blue;
+        }
+g_print("scoll done\n");
+        /* display updated frame buffer */
+        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 }
 
 /** ***************************************************************************
@@ -232,7 +257,12 @@ void print_character (guchar chr)
                 case LF:
                 case CR:
                         cursor_x = 0;
-                        cursor_y++; // check if have to scroll!!
+                        cursor_y++;
+                        if (cursor_y == LINES_PER_FRAME - 1) {
+                                cursor_y = CHARS_PER_LINE - 2;
+                                g_print("must scoll...\n");
+                                scroll_buffer();
+                        }
                         if (cursor_y == 25) {
                                 cursor_y = 24;
                                 scroll_buffer();
@@ -299,6 +329,11 @@ void draw_printable (guchar chr)
         cursor_x++;
         if (cursor_x == CHARS_PER_LINE) {
                 cursor_x = 0;
-                cursor_y++; // check if have to scroll!!
+                cursor_y++;
+                if (cursor_y == LINES_PER_FRAME - 1) {
+                        g_print("must scoll...\n");
+                        cursor_y = CHARS_PER_LINE - 2;
+                        scroll_buffer();
+                }
         }
 }
