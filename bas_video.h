@@ -26,11 +26,6 @@
 #include "cpu_interpreter.h"
 #include "cpu_parser.h"
 
-#define CHAR_PER_LINE 32
-#define TEXT_COL_DEFAULT 7
-#define BACK_COL_DEFAULT 0
-#define TEXT_COL_ERROR 3
-
 guchar vid_reset (void);
 guchar vid_clear (void);
 guchar vid_set_pen_colour (void);

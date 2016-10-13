@@ -102,7 +102,8 @@ gint build_ui (void)
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 
         /* connect destroy event to built-in gtk_main_quit() */
-        g_signal_connect(dhpc->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+        g_signal_connect (dhpc->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+        //g_signal_connect (dhpc->window, "delete_event", G_CALLBACK (gtk_window_iconify), NULL);
         g_signal_connect (dhpc->window, "key_press_event", G_CALLBACK (key_press_event), NULL);
         return TRUE;
 }

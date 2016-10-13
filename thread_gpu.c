@@ -89,8 +89,8 @@ gpointer GPU_thread_init (gpointer data)
  *****************************************************************************/
 
 void init_video() {
-        colour_pen = TEXT_COL_DEFAULT;
-        colour_paper = BACK_COL_DEFAULT;
+        colour_pen = color_converter(TEXT_COL_DEFAULT);
+        colour_paper = color_converter(BACK_COL_DEFAULT);
         clear_buffer();
         put_logo();
 }
@@ -102,9 +102,18 @@ void init_video() {
 struct rgb_triad color_converter (guchar colour)
 {
         struct rgb_triad rgb_colour;
-        guchar multiplier = ((colour >> 6) & 3);
-        rgb_colour.red = (colour & 3) * multiplier;
-        rgb_colour.green = ((colour >> 2) & 3) * multiplier;
-        rgb_colour.blue = ((colour >> 4) & 3) * multiplier;
+        guchar multiplier;
+        guchar correction;
+
+        if (colour & 128)
+                multiplier = 2;
+        else
+                multiplier = 1;
+
+        correction = (colour & 192) >> 5;
+        rgb_colour.red =   ((colour & 3)  << 5) * multiplier + correction;
+        rgb_colour.green = ((colour & 12) << 3) * multiplier + correction;
+        rgb_colour.blue =  ((colour & 48) << 1) * multiplier + correction;
+        g_print("(mul: %i) red: %i, green: %i, blue: %i\n", multiplier, rgb_colour.red, rgb_colour.green, rgb_colour.blue);
         return rgb_colour;
 }

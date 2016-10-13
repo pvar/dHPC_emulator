@@ -505,8 +505,6 @@ static void error_message (void)
 {
         //text_color (TEXT_COL_ERROR);
         //paper_color (BACK_COL_DEFAULT);
-colour_pen = TEXT_COL_ERROR;
-colour_paper = BACK_COL_DEFAULT;
 
         switch (error_code) {
         case 0x1:       // not yet implemented
@@ -586,10 +584,7 @@ colour_paper = BACK_COL_DEFAULT;
             printmsg (err_msg15, active_stream);
             break;
         }
+
         //text_color (TEXT_COL_DEFAULT);
         //paper_color (BACK_COL_DEFAULT);
-
-colour_pen = TEXT_COL_DEFAULT;
-colour_paper = BACK_COL_DEFAULT;
-
 }

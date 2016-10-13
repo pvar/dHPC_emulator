@@ -29,7 +29,24 @@ guchar vid_reset (void)
 
 guchar vid_clear (void)
 {
-        // clear frame buffer
+        gboolean tmp;
+
+        G_LOCK (gpu_data);
+        tmp = gpu_data.received;
+        G_UNLOCK (gpu_data);
+        while (tmp == FALSE) {
+                g_usleep (1000);
+                G_LOCK (gpu_data);
+                tmp = gpu_data.received;
+                G_UNLOCK (gpu_data);
+        }
+
+        G_LOCK (gpu_data);
+        gpu_data.type = GPU_CLEAR;
+        gpu_data.received = FALSE; // it will be set to TRUE when read from gpu-thread
+        gpu_data.new_set = TRUE;   // it will be set to FALSE when read from gpu-thread
+        G_UNLOCK (gpu_data);
+
         return POST_CMD_NEXT_STATEMENT;
 }
 
@@ -45,7 +62,7 @@ guchar vid_set_pen_colour (void)
                 return POST_CMD_WARM_RESET;
         }
         //text_color ((uint8_t)col);
-        colour_pen = (uint8_t)col;
+        //colour_pen = (uint8_t)col;
         return POST_CMD_NEXT_STATEMENT;}
 
 guchar vid_set_paper_colour(void)
@@ -60,7 +77,7 @@ guchar vid_set_paper_colour(void)
                 return POST_CMD_WARM_RESET;
         }
         //paper_color ((uint8_t)col);
-        colour_paper = (uint8_t)col;
+        //colour_paper = (uint8_t)col;
         return POST_CMD_NEXT_STATEMENT;
 }
 

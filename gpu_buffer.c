@@ -154,6 +154,19 @@ void reset_buffer (void)
 
 void clear_buffer (void)
 {
+        gint pxl_ptr;
+        guchar *pixel;
+
+        /* fill frame buffer with paper colour */
+        for (pxl_ptr = 0; pxl_ptr < FB_HEIGHT * FB_WIDTH; pxl_ptr++) {
+                pixel = &dhpc->pixelbuffer[pxl_ptr * 3];
+                *pixel     = colour_paper.red;
+                *(pixel+1) = colour_paper.green;
+                *(pixel+2) = colour_paper.blue;
+        }
+        /* display updated frame buffer */
+        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        /* reset cursor position */
         cursor_x = 0;
         cursor_y = 0;
 }
@@ -255,11 +268,6 @@ void draw_printable (guchar chr)
         guchar font_line, font_data, pxl_ptr;
         guchar *pixel;
         gint pixel_col, pixel_row, fb_offset;
-        struct rgb_triad paper;
-        struct rgb_triad pen;
-
-        pen = color_converter (colour_pen);
-        paper = color_converter (colour_paper);
 
         for (font_line = 0; font_line < 10; font_line++) {
                 pixel_col = cursor_x * 8;
@@ -270,18 +278,18 @@ void draw_printable (guchar chr)
                 for (pxl_ptr = 0; pxl_ptr < 8; pxl_ptr++) {
                         pixel = &dhpc->pixelbuffer[(fb_offset + pxl_ptr) * 3];
                         if (font_data & 128) {
-                                *pixel     = 200;//pen.red;
-                                *(pixel+1) = pen.green;
-                                *(pixel+2) = pen.blue;
+                                *pixel     = colour_pen.red;
+                                *(pixel+1) = colour_pen.green;
+                                *(pixel+2) = colour_pen.blue;
                         } else {
-                                *pixel     = paper.red;
-                                *(pixel+1) = paper.green;
-                                *(pixel+2) = paper.blue;
+                                *pixel     = colour_paper.red;
+                                *(pixel+1) = colour_paper.green;
+                                *(pixel+2) = colour_paper.blue;
                         }
                         font_data = font_data << 1;
                 }
         }
-        /* display frame buffer on screen */
+        /* display updated frame buffer */
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 
         cursor_x++;

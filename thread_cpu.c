@@ -32,8 +32,6 @@ gpointer CPU_thread_init (gpointer data)
         init_io();
         init_basic();
 
-g_usleep (1000000);
-
         do_beep();
         /* print welcome message */
         printmsg (msg_welcome, active_stream);

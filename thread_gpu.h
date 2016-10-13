@@ -28,7 +28,7 @@
 // ------------------------------------------------------------------------------
 
 #define CHAR_PER_LINE 32
-#define TEXT_COL_DEFAULT 7
+#define TEXT_COL_DEFAULT 12
 #define BACK_COL_DEFAULT 0
 #define TEXT_COL_ERROR 3
 
@@ -43,7 +43,9 @@ struct rgb_triad {
 };
 
 guchar cursor_x, cursor_y;
-guchar colour_pen, colour_paper;
+
+struct rgb_triad colour_pen;
+struct rgb_triad colour_paper;
 
 guchar cpu_command;
 guchar cpu_data[8];
