@@ -238,7 +238,8 @@ guint getchr_kbd (void) {
                 tmp = keyboard_data.cnt;
                 G_UNLOCK (keyboard_data);
                 while (tmp == 0) {
-                        g_usleep (16000);
+                        //g_usleep (16000);
+                        g_usleep (500);
                         G_LOCK (keyboard_data);
                         tmp = keyboard_data.cnt;
                         G_UNLOCK (keyboard_data);
@@ -271,7 +272,8 @@ void putchr_gpu (guchar chr)
         tmp = gpu_data.received;
         G_UNLOCK (gpu_data);
         while (tmp == FALSE) {
-                g_usleep (2000);
+                //g_usleep (2000);
+                g_usleep (250);
                 G_LOCK (gpu_data);
                 tmp = gpu_data.received;
                 G_UNLOCK (gpu_data);
@@ -304,7 +306,8 @@ void putcmd_gpu (guchar command, gint length, guchar *data)
         tmp = gpu_data.received;
         G_UNLOCK (gpu_data);
         while (tmp == FALSE) {
-                g_usleep (2000);
+                //g_usleep (2000);
+                g_usleep (250);
                 G_LOCK (gpu_data);
                 tmp = gpu_data.received;
                 G_UNLOCK (gpu_data);

@@ -47,7 +47,8 @@ gpointer GPU_thread_init (gpointer data)
                 tmp = gpu_data.new_set;
                 G_UNLOCK (gpu_data);
                 while (tmp == FALSE) {
-                        g_usleep (2000);
+                        //g_usleep (2000);
+                        g_usleep (250);
                         G_LOCK (gpu_data);
                         tmp = gpu_data.new_set;
                         G_UNLOCK (gpu_data);
