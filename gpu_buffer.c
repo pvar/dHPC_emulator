@@ -214,30 +214,36 @@ void put_logo (void)
 
 void scroll_buffer (void)
 {
-        gint pxl_ptr, pxl_line;
+        gint chr_line,pxl_ptr, pxl_line;
+        gint offset;
+        gint line_offset;
         guchar *pixel1;
         guchar *pixel2;
 
-g_print("scoll init\n");
-        /* transfer buffer data one character-line up */
-        for (pxl_line = 0; pxl_line < 2 * PXL_LINES_PER_CHAR; pxl_line++) {
-                for (pxl_ptr = 0; pxl_ptr < FB_WIDTH; pxl_ptr++) {
-                        pixel1 = &dhpc->pixelbuffer[pxl_ptr * 3];
-                        pixel2 = &dhpc->pixelbuffer[pxl_ptr * 3 + pxl_line + FB_WIDTH];
-                        *pixel1     = *pixel2;
-                        *(pixel1+1) = *(pixel2+1);
-                        *(pixel1+2) = *(pixel2+1);
+        /* move character-lines up */
+        line_offset = 20 * FB_WIDTH;
+        for (chr_line = 0; chr_line < LINES_PER_FRAME - 1; chr_line++) {
+                for (pxl_line = 0; pxl_line < 2 * PXL_LINES_PER_CHAR; pxl_line += 2) {
+                        offset = (chr_line * 20 + pxl_line) * FB_WIDTH;
+                        for (pxl_ptr = 0; pxl_ptr < FB_WIDTH; pxl_ptr++) {
+                                pixel1 = &dhpc->pixelbuffer[(offset + pxl_ptr) * 3];
+                                pixel2 = &dhpc->pixelbuffer[(offset + pxl_ptr + line_offset) * 3];
+                                *pixel1     = *pixel2;
+                                *(pixel1+1) = *(pixel2+1);
+                                *(pixel1+2) = *(pixel2+2);
+                        }
                 }
         }
-g_print("scoll moved\n");
-        /* fill last character-line of buffer with paper colour */
-        for (pxl_ptr = (FB_HEIGHT - 20) * FB_WIDTH; pxl_ptr < FB_HEIGHT * FB_WIDTH; pxl_ptr++) {
-                pixel1 = &dhpc->pixelbuffer[pxl_ptr * 3];
-                *pixel1     = colour_paper.red;
-                *(pixel1+1) = colour_paper.green;
-                *(pixel1+2) = colour_paper.blue;
+        /* clear last character-line */
+        for (pxl_line = 0; pxl_line < 2 * PXL_LINES_PER_CHAR; pxl_line += 2) {
+                offset = (FB_HEIGHT - 20 + pxl_line) * FB_WIDTH;
+                for (pxl_ptr = 0; pxl_ptr < FB_WIDTH; pxl_ptr++) {
+                        pixel1 = &dhpc->pixelbuffer[(offset + pxl_ptr) * 3];
+                        *pixel1     = colour_paper.red;
+                        *(pixel1+1) = colour_paper.green;
+                        *(pixel1+2) = colour_paper.blue;
+                }
         }
-g_print("scoll done\n");
         /* display updated frame buffer */
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 }
@@ -258,13 +264,8 @@ void print_character (guchar chr)
                 case CR:
                         cursor_x = 0;
                         cursor_y++;
-                        if (cursor_y == LINES_PER_FRAME - 1) {
-                                cursor_y = CHARS_PER_LINE - 2;
-                                g_print("must scoll...\n");
-                                scroll_buffer();
-                        }
-                        if (cursor_y == 25) {
-                                cursor_y = 24;
+                        if (cursor_y > LINES_PER_FRAME - 1) {
+                                cursor_y = LINES_PER_FRAME - 1;
                                 scroll_buffer();
                         }
                         break;
@@ -296,6 +297,13 @@ void draw_printable (guchar chr)
         guchar font_line, font_data, pxl_ptr;
         guchar *pixel;
         guint pixel_col, pixel_row, fb_offset;
+
+
+        if (cursor_y > 23) {
+                g_print("WARNING:\n");
+                g_print("Cannot print; Cursor-Y value is %i\n",cursor_y);
+                return;
+        }
 
         for (font_line = 0; font_line < PXL_LINES_PER_CHAR; font_line++) {
                 pixel_col = cursor_x * 8;
@@ -330,9 +338,8 @@ void draw_printable (guchar chr)
         if (cursor_x == CHARS_PER_LINE) {
                 cursor_x = 0;
                 cursor_y++;
-                if (cursor_y == LINES_PER_FRAME - 1) {
-                        g_print("must scoll...\n");
-                        cursor_y = CHARS_PER_LINE - 2;
+                if (cursor_y > LINES_PER_FRAME - 1) {
+                        cursor_y = LINES_PER_FRAME - 1;
                         scroll_buffer();
                 }
         }
