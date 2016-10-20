@@ -96,6 +96,7 @@ guchar vid_locate_cursor (void)
                 error_code = 0x10;
                 return POST_CMD_WARM_RESET;
         }
+
         data[0] = (guchar)line;
         data[1] = (guchar)column;
         putcmd_gpu (GPU_LOCATE, 2, data);
@@ -106,6 +107,7 @@ guchar vid_put_pixel (void)
 {
         gint x, y;
         guchar col;
+        guchar data[3];
 
         // get x-coordinate
         x = parse_expr_s1();
@@ -143,6 +145,10 @@ guchar vid_put_pixel (void)
                 error_code = 0x14;
                 return POST_CMD_WARM_RESET;
         }
-        //vid_put_pixel ((guchar)x, (guchar)y, (guchar)col);
+
+        data[0] = (guchar)x;
+        data[1] = (guchar)y;
+        data[2] = col;
+        putcmd_gpu (GPU_PSET, 3, data);
         return POST_CMD_NEXT_STATEMENT;
 }

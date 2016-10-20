@@ -63,6 +63,7 @@ enum {
         GPU_LOCATE,
         GPU_PEN,
         GPU_PAPER,
+        GPU_PSET,
         GPU_CLEAR,
         GPU_RESET
 };

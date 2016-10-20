@@ -26,8 +26,8 @@
 #include "thread_gpu.h"
 
 void clear_buffer (void);
-void put_pixel (void);
 void put_logo (void);
+void put_pixel (guchar x, guchar y, guchar colour);
 void print_character (guchar chr);
 void draw_printable (guchar chr);
 

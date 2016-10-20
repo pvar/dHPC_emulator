@@ -77,6 +77,9 @@ gpointer GPU_thread_init (gpointer data)
                         case GPU_PEN:
                                 colour_pen = color_converter(cpu_data[0]);
                                 break;
+                        case GPU_PSET:
+                                put_pixel (cpu_data[0], cpu_data[1], cpu_data[2]);
+                                break;
                         case GPU_LOCATE:
                                 if (cpu_data[0] < 0)
                                         cursor_y = 0;

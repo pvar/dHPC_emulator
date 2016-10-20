@@ -168,8 +168,21 @@ void clear_buffer (void)
  * @brief
  *****************************************************************************/
 
-void put_pixel (void)
+void put_pixel (guchar x, guchar y, guchar colour)
 {
+        guchar *pixel;
+        struct rgb_triad pixel_col = color_converter(colour);
+
+        /* draw pixel on fram buffer */
+        pixel = &dhpc->pixelbuffer[(x + 2 * y * FB_WIDTH) * 3];
+        *pixel     = pixel_col.red;
+        *(pixel+1) = pixel_col.green;
+        *(pixel+2) = pixel_col.blue;
+        *(pixel+3) = pixel_col.red;
+        *(pixel+4) = pixel_col.green;
+        *(pixel+5) = pixel_col.blue;
+        /* display updated frame buffer */
+        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 }
 
 /** ***************************************************************************
@@ -307,10 +320,10 @@ void draw_printable (guchar chr)
 
         for (font_line = 0; font_line < PXL_LINES_PER_CHAR; font_line++) {
                 pixel_col = cursor_x * 8;
-                pixel_row = cursor_y * 10 + font_line;
+                pixel_row = cursor_y * PXL_LINES_PER_CHAR + font_line;
                 fb_offset = pixel_row * FB_WIDTH + pixel_col;
 
-                font_data = fontdata[(chr - 32) * 10 + font_line];
+                font_data = fontdata[(chr - 32) * PXL_LINES_PER_CHAR + font_line];
                 for (pxl_ptr = 0; pxl_ptr < 8; pxl_ptr++) {
                         pixel = &dhpc->pixelbuffer[(fb_offset + pxl_ptr) * 6];
                         if (font_data & 128) {
