@@ -1,6 +1,7 @@
 *txt
 *~
 *.o
+*.dbg_o
 bin/*~
 bin/dhpcemu
 dhpcemu.geany

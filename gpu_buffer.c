@@ -258,6 +258,7 @@ void scroll_buffer (void)
                 }
         }
         /* display updated frame buffer */
+        gtk_image_clear (dhpc->screen);
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 }
 
@@ -311,7 +312,6 @@ void draw_printable (guchar chr)
         guchar *pixel;
         guint pixel_col, pixel_row, fb_offset;
 
-
         if (cursor_y > 23) {
                 g_print("WARNING:\n");
                 g_print("Cannot print; Cursor-Y value is %i\n",cursor_y);
@@ -344,7 +344,9 @@ void draw_printable (guchar chr)
                         font_data = font_data << 1;
                 }
         }
+
         /* display updated frame buffer */
+        gtk_image_clear (dhpc->screen);
         gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
 
         cursor_x++;

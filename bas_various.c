@@ -442,6 +442,7 @@ int8_t misc_list (void)
                 length = (LINE_LENGTH) (*(line + sizeof (LINE_NUMBER)));
                 line += length;
         }
+
         return POST_CMD_WARM_RESET;
 }
 

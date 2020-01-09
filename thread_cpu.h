@@ -64,7 +64,8 @@ struct input_buffer {
        gint cnt;
 } keyboard_data;
 
-G_LOCK_DEFINE (keyboard_data);
+GMutex *kbd_data_mutex;
+GCond *kbd_data_cond;
 
 guchar sys_config;
 

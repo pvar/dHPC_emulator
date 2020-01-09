@@ -30,6 +30,7 @@
 gpointer GPU_thread_init (gpointer data)
 {
         guint i;
+        gint64 end_time;
 
         /* initialize local data */
         cpu_command = 0;
@@ -41,27 +42,22 @@ gpointer GPU_thread_init (gpointer data)
 
         /* main loop: get and process incoming data */
         while (1) {
-                gboolean tmp;
                 /* wait for new set of data*/
-                G_LOCK (gpu_data);
-                tmp = gpu_data.new_set;
-                G_UNLOCK (gpu_data);
-                while (tmp == FALSE) {
-                        //g_usleep (2000);
-                        g_usleep (250);
-                        G_LOCK (gpu_data);
-                        tmp = gpu_data.new_set;
-                        G_UNLOCK (gpu_data);
+                g_mutex_lock (gpu_data_mutex);
+                while (!gpu_data.new_set) {
+                    end_time = g_get_monotonic_time () + 0.32 * G_TIME_SPAN_SECOND;
+                    g_cond_wait_until(gpu_data_cond, gpu_data_mutex, end_time);
+//                    g_cond_wait(gpu_data_cond, gpu_data_mutex);
                 }
 
                 /* get data to local variables */
-                G_LOCK (gpu_data);
                 cpu_command = gpu_data.type;
                 for (i = 0; i < GPU_DATA_LENGTH; i++)
                         cpu_data[i] = gpu_data.data[i];
                 gpu_data.received = TRUE;
                 gpu_data.new_set = FALSE;
-                G_UNLOCK (gpu_data);
+                g_cond_signal(gpu_data_cond);
+                g_mutex_unlock (gpu_data_mutex);
 
                 /* process received command */
                 switch (cpu_command) {

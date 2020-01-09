@@ -30,9 +30,6 @@ gint main (int argc, char *argv[])
         /* initialize GTK+ libraries */
         gtk_init(&argc, &argv);
 
-        /* start thread for emulation of CPU */
-        g_thread_new ("CPU thread", CPU_thread_init, NULL);
-
         /* build UI from XML file and prepare buffers */
         if(build_ui() == FALSE)
                 return 1;
@@ -40,11 +37,29 @@ gint main (int argc, char *argv[])
         /* display main window */
         gtk_widget_show(dhpc->window);
 
+        /* mutex and cond for GPU */
+        gpu_data_mutex = g_new(GMutex, 1);
+        gpu_data_cond = g_new(GCond, 1);
+        g_mutex_init(gpu_data_mutex);
+        g_cond_init(gpu_data_cond);
+
+        /* mutex and cond for KBD */
+        kbd_data_mutex = g_new(GMutex, 1);
+        kbd_data_cond =  g_new(GCond, 1);
+        g_mutex_init (kbd_data_mutex);
+        g_cond_init(kbd_data_cond);
+
+        /* start thread for emulation of CPU */
+        g_thread_new ("CPU thread", CPU_thread_init, NULL);
+
         /* start thread for emulation of GPU */
         g_thread_new ("GPU thread", GPU_thread_init, NULL);
 
         /* start thread for emulation of APU */
         //g_thread_new ("APU thread", APU_thread_init, NULL);
+
+        /* connect keypress event to appropriate function */
+        g_signal_connect (dhpc->window, "key_press_event", G_CALLBACK (key_press_event), NULL);
 
         /* enter the GTK+ mainloop */
         gtk_main();
@@ -90,9 +105,9 @@ gint build_ui (void)
         dhpc->framebuffer = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, FB_WIDTH, FB_HEIGHT);
         dhpc->pixelbuffer = gdk_pixbuf_get_pixels(dhpc->framebuffer);
 
-        /* pixel manipulation example: a white dot in the middle of the screen */
+        /* pixel manipulation example: puts a dot in the middle of the screen */
         /*
-        guchar *pixel = &dhpc->pixelbuffer[(120 * FB_WIDTH + 128) * 3];
+        guchar *pixel = &dhpc->pixelbuffer[((FB_HEIGHT / 4) * FB_WIDTH + (FB_WIDTH / 4)) * 3];
         *pixel     = 240;
         *(pixel+1) = 120;
         *(pixel+2) = 32;
@@ -104,7 +119,6 @@ gint build_ui (void)
         /* connect destroy event to built-in gtk_main_quit() */
         g_signal_connect (dhpc->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
         //g_signal_connect (dhpc->window, "delete_event", G_CALLBACK (gtk_window_iconify), NULL);
-        g_signal_connect (dhpc->window, "key_press_event", G_CALLBACK (key_press_event), NULL);
         return TRUE;
 }
 
@@ -143,7 +157,8 @@ void key_press_event (GtkWidget *widget, GdkEventKey *event)
 
         GdkModifierType modifiers;
 
-        G_LOCK (keyboard_data);
+        g_mutex_lock (kbd_data_mutex);
+
         modifiers = gtk_accelerator_get_default_mod_mask();
         /* check if there is free space in buffer */
         if (keyboard_data.cnt < KEYBOARD_BUFFER_SIZE) {
@@ -181,5 +196,6 @@ void key_press_event (GtkWidget *widget, GdkEventKey *event)
         } else {
                 do_beep();
         }
-        G_UNLOCK (keyboard_data);
+        g_cond_signal(kbd_data_cond);
+        g_mutex_unlock (kbd_data_mutex);
 }

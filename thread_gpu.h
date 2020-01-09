@@ -52,7 +52,8 @@ struct packet_to_gpu {
         gboolean new_set;
 } gpu_data;
 
-G_LOCK_DEFINE (gpu_data);
+GMutex *gpu_data_mutex;
+GCond *gpu_data_cond;
 
 guchar cursor_x, cursor_y;
 

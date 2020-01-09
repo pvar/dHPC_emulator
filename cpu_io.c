@@ -41,8 +41,7 @@ void get_line (void)
         text_ptr = prog_end_ptr + sizeof (LINE_NUMBER);
         guchar *maxpos = text_ptr;
 
-        guint temp1, temp2;
-        guint in_char;
+        guint temp1, temp2, in_char;
 
         while (1) {
                 in_char = emu_getchar (STREAM_STD);
@@ -159,28 +158,26 @@ void init_io (void)
         guint i;
 
         /* init keyboard buffer */
-        G_LOCK (keyboard_data);
+        g_mutex_lock (kbd_data_mutex);
         keyboard_data.wp = 0;
         keyboard_data.cnt = 0;
-        G_UNLOCK (keyboard_data);
+        g_mutex_unlock (kbd_data_mutex);
 
         /* init struct for communication with GPU */
-        G_LOCK (gpu_data);
+        // GPU thread has not yet been started -- no need to lock/unlock mutex
         gpu_data.type = GPU_PRINT;
         for (i = 0; i < GPU_DATA_LENGTH; i++)
                 gpu_data.data[i] = 0;
         gpu_data.received = TRUE;
         gpu_data.new_set = FALSE;
-        G_UNLOCK (gpu_data);
 
         /* init struct for communication with APU */
-        G_LOCK (apu_data);
+        // APU thread has not yet been started -- no need to lock/unlock mutex
         apu_data.type = APU_STOP;
         for (i = 0; i < APU_DATA_PACKET; i++)
                 apu_data.data[i] = 0;
         apu_data.received = TRUE;
         apu_data.new_set = FALSE;
-        G_UNLOCK (apu_data);
 
         active_stream = STREAM_STD;
 }
@@ -231,24 +228,20 @@ guint emu_getchar (guchar stream)
 guint getchr_kbd (void) {
         static gint rp;
         gint input_char = -1;
-        guint tmp;
+        gint64 end_time;
 
         while (input_char == -1) {
-                G_LOCK (keyboard_data);
-                tmp = keyboard_data.cnt;
-                G_UNLOCK (keyboard_data);
-                while (tmp == 0) {
-                        //g_usleep (16000);
-                        g_usleep (500);
-                        G_LOCK (keyboard_data);
-                        tmp = keyboard_data.cnt;
-                        G_UNLOCK (keyboard_data);
+                g_mutex_lock (kbd_data_mutex);
+                while (!keyboard_data.cnt) {
+                    end_time = g_get_monotonic_time () + 1 * G_TIME_SPAN_SECOND;
+                    g_cond_wait_until(kbd_data_cond, kbd_data_mutex, end_time);
                 }
 
-                G_LOCK (keyboard_data);
                 /* get character from buffer */
                 input_char = keyboard_data.buffer[rp];
-                G_UNLOCK (keyboard_data);
+                g_cond_signal (kbd_data_cond);
+                g_mutex_unlock (kbd_data_mutex);
+
                 /* update read pointer */
                 rp++;
                 if (rp == KEYBOARD_BUFFER_SIZE)
@@ -265,27 +258,20 @@ guint getchr_kbd (void) {
 
 void putchr_gpu (guchar chr)
 {
-        gboolean tmp;
-
-        /* wait for other threads to stop using gpu_data */
-        G_LOCK (gpu_data);
-        tmp = gpu_data.received;
-        G_UNLOCK (gpu_data);
-        while (tmp == FALSE) {
-                //g_usleep (2000);
-                g_usleep (250);
-                G_LOCK (gpu_data);
-                tmp = gpu_data.received;
-                G_UNLOCK (gpu_data);
+        gint64 end_time;
+        g_mutex_lock (gpu_data_mutex);
+        while (!gpu_data.received) {
+            end_time = g_get_monotonic_time () + 1 * G_TIME_SPAN_SECOND;
+            g_cond_wait_until(gpu_data_cond, gpu_data_mutex, end_time);
         }
 
-        /* load values to gup_data struct */
-        G_LOCK (gpu_data);
+        /* load values to gpu_data struct */
         gpu_data.type = GPU_PRINT;
         gpu_data.data[0] = chr;
         gpu_data.received = FALSE; // it will be set to TRUE when read from gpu-thread
         gpu_data.new_set = TRUE;   // it will be set to FALSE when read from gpu-thread
-        G_UNLOCK (gpu_data);
+        g_cond_signal(gpu_data_cond);
+        g_mutex_unlock (gpu_data_mutex);
 }
 
 /** ***************************************************************************
@@ -294,33 +280,27 @@ void putchr_gpu (guchar chr)
 
 void putcmd_gpu (guchar command, gint length, guchar *data)
 {
-        gboolean tmp;
-        guint i;
+        gint64 end_time;
 
         /* sanitize length */
         if (length > GPU_DATA_LENGTH)
                 length = GPU_DATA_LENGTH;
 
-        /* wait for other threads to stop using gpu_data */
-        G_LOCK (gpu_data);
-        tmp = gpu_data.received;
-        G_UNLOCK (gpu_data);
-        while (tmp == FALSE) {
-                //g_usleep (2000);
-                g_usleep (250);
-                G_LOCK (gpu_data);
-                tmp = gpu_data.received;
-                G_UNLOCK (gpu_data);
+        g_mutex_lock (gpu_data_mutex);
+        while (!gpu_data.received) {
+            end_time = g_get_monotonic_time () + 1 * G_TIME_SPAN_SECOND;
+            g_cond_wait_until(gpu_data_cond, gpu_data_mutex, end_time);
         }
 
-        /* load values to gup_data struct */
-        G_LOCK (gpu_data);
+        /* load values to gpu_data struct */
         gpu_data.type = command;
+        guint i;
         for (i = 0; i < length; i++)
                 gpu_data.data[i] = *(data + i);
         gpu_data.received = FALSE; // it will be set to TRUE when read from gpu-thread
         gpu_data.new_set = TRUE;   // it will be set to FALSE when read from gpu-thread
-        G_UNLOCK (gpu_data);
+        g_cond_signal(gpu_data_cond);
+        g_mutex_unlock (gpu_data_mutex);
 }
 
 

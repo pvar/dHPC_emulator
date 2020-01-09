@@ -518,7 +518,6 @@ static void error_message (void)
         case 0x2:       // syntax error
             printmsg_noNL (err_msg02, active_stream);
             if (line_ptr != NULL) {
-                printf (" -- ");
                 guchar tmp = *text_ptr;
                 if (*text_ptr != LF)
                     *text_ptr = '^';
