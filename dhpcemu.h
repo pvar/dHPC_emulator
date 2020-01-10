@@ -19,8 +19,9 @@
 // PROTOTYPES
 // ------------------------------------------------------------------------------
 
-gint get_current_path ( gchar **dir );
-gint build_ui ( void );
+gint get_current_path (gchar **dir);
+gint build_ui (void);
+gboolean update_screen (gpointer data);
 
 // ------------------------------------------------------------------------------
 // MACROS
@@ -48,6 +49,9 @@ typedef struct {
 } dHPC;
 
 dHPC *dhpc;
+
+gboolean new_content; // new data to display on "screen"
+
 
 struct packet_to_apu {
         guchar type;

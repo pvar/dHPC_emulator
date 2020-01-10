@@ -151,13 +151,15 @@ void clear_buffer (void)
 
         /* fill frame buffer with paper colour */
         for (pxl_ptr = 0; pxl_ptr < FB_HEIGHT * FB_WIDTH; pxl_ptr++) {
-                pixel = &dhpc->pixelbuffer[pxl_ptr * 3];
+                 pixel     = &dhpc->pixelbuffer[pxl_ptr * 3];
                 *pixel     = colour_paper.red;
                 *(pixel+1) = colour_paper.green;
                 *(pixel+2) = colour_paper.blue;
         }
         /* display updated frame buffer */
-        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        //gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        new_content = TRUE;
+
         /* reset cursor position */
         cursor_x = 0;
         cursor_y = 0;
@@ -181,8 +183,10 @@ void put_pixel (guchar x, guchar y, guchar colour)
         *(pixel+3) = pixel_col.red;
         *(pixel+4) = pixel_col.green;
         *(pixel+5) = pixel_col.blue;
+
         /* display updated frame buffer */
-        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        //gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        new_content = TRUE;
 }
 
 /** ***************************************************************************
@@ -217,8 +221,10 @@ void put_logo (void)
                         *(pixel+5) = pixel_col.blue;
                 }
         }
+
         /* display updated frame buffer */
-        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        //gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        new_content = TRUE;
 }
 
 /** ***************************************************************************
@@ -257,9 +263,10 @@ void scroll_buffer (void)
                         *(pixel1+2) = colour_paper.blue;
                 }
         }
+
         /* display updated frame buffer */
-        gtk_image_clear (dhpc->screen);
-        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        //gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        new_content = TRUE;
 }
 
 /** ***************************************************************************
@@ -346,8 +353,8 @@ void draw_printable (guchar chr)
         }
 
         /* display updated frame buffer */
-        gtk_image_clear (dhpc->screen);
-        gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        //gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        new_content = TRUE;
 
         cursor_x++;
         if (cursor_x == CHARS_PER_LINE) {

@@ -61,6 +61,9 @@ gint main (int argc, char *argv[])
         /* connect keypress event to appropriate function */
         g_signal_connect (dhpc->window, "key_press_event", G_CALLBACK (key_press_event), NULL);
 
+        /* add a timer-function for updating GUI from main thread */
+        g_timeout_add (50, update_screen, NULL);
+
         /* enter the GTK+ mainloop */
         gtk_main();
 
@@ -68,6 +71,17 @@ gint main (int argc, char *argv[])
         g_slice_free(dHPC, dhpc);
 
         return 0;
+}
+
+gboolean update_screen (gpointer data)
+{
+        (void)data;
+
+        if (new_content) {
+            new_content = FALSE;
+            gtk_image_set_from_pixbuf (dhpc->screen, dhpc->framebuffer);
+        }
+        return TRUE;
 }
 
 gint build_ui (void)
