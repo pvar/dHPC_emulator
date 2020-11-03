@@ -22,7 +22,7 @@ OUTPUT_DBG = bin/dhpcemu.a
 ### PARAMETERS
 ### ---------------------------------------------------------------------------
 
-STANDARD = -std=gnu11
+STANDARD = -std=gnu11 -fcommon
 WARNINGS = -Wall -Wstrict-prototypes
 TUNNING = -O3 -fshort-enums
 ERRORS = -Werror
